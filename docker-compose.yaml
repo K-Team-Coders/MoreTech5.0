@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+
+  frontend:
+    restart: always
+    container_name: frontend
+    build:
+      context: ./frontend
+    ports:
+      - 8080:8080
+    expose:
+      - 8080
+
+  backend:
+    restart: always
+    container_name: backend
+    env_file:
+      - ./DB.env
+    build: 
+      context: ./fastApi
+    ports:
+      - 8081:8081
+    expose:
+      - 8081
+    depends_on:
+      - db
+    command: ['uvicorn', 'main:app', '--host=0.0.0.0', '--port=8081', '--reload']
+
+  db:
+    container_name: db
+    env_file:
+      - ./DB.env
+    build: ./database
+    restart: always
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+
+volumes:
+  pgdata:
