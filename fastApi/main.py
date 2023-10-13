@@ -37,7 +37,7 @@ try:
     
     PORT=os.environ.get("PORT")
 
-    logger.success(('Docker DB connection started \n', HOST, PORT, DBNAME, USER, PASSWORD, ' - env variables!'))
+    logger.success(f'Database connection started {HOST}, {PORT}, {DBNAME}, {USER}, {PASSWORD}, - env variables!')
 
     conn = psycopg2.connect(
         dbname=DBNAME, 
@@ -55,6 +55,7 @@ try:
 
 except Exception as e:
     logger.error(f'Database connect failed \n {e}!')
+
 
 app = FastAPI()
 
