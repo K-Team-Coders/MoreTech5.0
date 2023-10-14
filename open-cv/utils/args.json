@@ -1,0 +1,8 @@
+{
+    "prototxt":"../fastapi/detector/MobileNetSSD_deploy.prototxt",
+    "model":"../fastapi/detector/MobileNetSSD_deploy.caffemodel",
+    "input":"../fastapi/utils/data/tests/test_2.mp4",
+    "output":"output.avi",
+    "confidence":0.4,
+    "skip_frames":30
+}
