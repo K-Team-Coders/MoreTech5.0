@@ -4,6 +4,7 @@ import time
 import json
 import random
 from pathlib import Path
+from typing import Optional
 
 import psycopg2
 from loguru import logger
@@ -50,9 +51,31 @@ offices = 0
 with open('offices.txt', 'r', encoding='utf-8') as f:
     offices = json.load(f) 
 
+results_office = []
+for index, office in enumerate(offices):
+    result = {}
+    result["id"] = index
+    result["name"] = office["salePointName"]
+    result["address"] = office["address"]   
+    result["openHours"] = office["openHours"]
+    result["longitude"] = office["longitude"]
+    result["latitude"] = office["latitude"]
+    result["services"] = random.sample(list(timings.keys()), 10)
+    results_office.append(result)
+
+
 atms = 0
 with open('atms.txt', 'r', encoding='utf-8') as f:
     atms = json.load(f) 
+
+results_atms = []
+for index, atm in enumerate(atms["atms"]):
+    result = {}
+    result["id"] = index 
+    result["address"] = atm["address"]   
+    result["longitude"] = atm["longitude"]
+    result["latitude"] = atm["latitude"]
+    results_atms.append(result)
 
 DBenv = Path().cwd().parent.joinpath("DB.env")
 load_dotenv(DBenv, override=True)
@@ -113,6 +136,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+def modelingCameraAdded():
+    """
+    Каждые N секунд в отделение заходит посетитель в случайное отделение
+    Зная по историческим данным среднее время обслуживание каждой услуги, не зная конкретно что может понадобиться посетителю, возьмем 
+    """
+
 def modelingTalonAdded():
     """
     Каждые N секунд добавляется человек в очередь в рандомное отделение
@@ -123,7 +152,7 @@ def modelingTalonAdded():
     service = random.choice(list(timings.keys()))
     service_time = timings[service]
     current_time = datetime.datetime.now()
-    bank = random.choice([(x["salePointName"], x["latitude"], x["longitude"]) for x in offices])
+    bank = random.choice([(x["name"], x["latitude"], x["longitude"]) for x in [y for y in results_office if service in y["services"]]])
 
     logger.debug(f"Талон -- {service} {service_time}")
     logger.debug(f"Время получения талона -- {current_time}")
@@ -147,31 +176,6 @@ def start_modeling():
     scheduler = BackgroundScheduler()
     scheduler.add_job(modelingTalonAdded, "interval", seconds=5)
     scheduler.start()
-
-def getAtmsCoords():
-    results = []
-    for index, atm in enumerate(atms["atms"]):
-        result = {}
-        result["id"] = index 
-        result["address"] = atm["address"]   
-        result["longitude"] = atm["longitude"]
-        result["latitude"] = atm["latitude"]
-        results.append(result)
-    return results
-
-def getOfficesCoords():
-    results = []
-    for index, office in enumerate(offices):
-        result = {}
-        result["id"] = index
-        result["name"] = office["salePointName"]
-        result["address"] = office["address"]   
-        result["openHours"] = office["openHours"]
-        result["longitude"] = office["longitude"]
-        result["latitude"] = office["latitude"]
-        result["services"] = random.sample(list(timings.keys()), 10)
-        results.append(result)
-    return results
 
 def getAllTimings():
     cur.execute("SELECT * FROM queue")
@@ -198,8 +202,8 @@ def getAllTimings():
     return result
 
 @app.get("/getAllBanks")
-def webAllBanks():
-    offices = getOfficesCoords()
-    atms = getAtmsCoords()
+def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[list] = [], invalid: Optional[bool] = False, backway: Optional[bool] = False):
+    offices = results_office
+    atms = results_atms
     timings = getAllTimings()
     return JSONResponse(content={"offices": offices, "atms": atms, "timings": timings}, status_code=200)
