@@ -55,7 +55,7 @@ export default {
       activeIndex: 0,
       navItems: [
         { label: "Карта", icon: "map" },
-        { label: "Статистика", icon: "dashboard" },
+        { label: "Видео", icon: "video" },
       ],
     };
   },
