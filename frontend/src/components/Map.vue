@@ -1,5 +1,5 @@
 <template>
-  <div class="border-idealRed border-[6px] rounded-lg shadow-cards">
+  <div class="border-idealBlue border-[6px] rounded-lg shadow-cards">
     <yandex-map :coords="coords" :use-object-manager="true" :object-manager-clusterize="true" :settings="settings"
       :zoom="5" :cluster-options="clusterOptions">
       <ymap-marker v-for="item in postamat_list" :key="item.id" :coords="[item.latitude, item.longitude]"

@@ -1,118 +1,45 @@
 <template>
   <div>
-    <p class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1">
-      Проблема
-    </p>
-    <div
-      id="v-model-multiple-checkboxes"
-      class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
-    >
-      <div class="">
-        <input
-          type="checkbox"
-          id="no problem"
-          class=""
-          value="0"
-          v-model="filter.checkedProblems"
-        />
-        <label class="ml-2" for="no problem">Проблем нет</label><br />
-      </div>
-      <div class="">
-        <input
-          type="checkbox"
-          id="product"
-          value="1"
-          v-model="filter.checkedProblems"
-        />
-        <label class="ml-2" for="product">Проблема с товаром</label><br />
-      </div>
-      <div class="">
-        <input
-          type="checkbox"
-          id="deliver"
-          value="2"
-          v-model="filter.checkedProblems"
-        />
-        <label class="ml-2" for="deliver">Проблема с доставкой</label><br />
-      </div>
-      <div class="">
-        <input
-          type="checkbox"
-          id="postamat"
-          value="3"
-          v-model="filter.checkedProblems"
-        />
-        <label class="ml-2" for="postamat">Проблема с постаматом</label><br />
-      </div>
-      <div class="">
-        <input
-          type="checkbox"
-          id="date"
-          value="4"
-          v-model="filter.checkedProblems"
-        />
-        <label class="ml-2" for="date">Проблема со сроками</label>
-        <br />
-      </div>
-
-      <p class="text-lg font-TT_Firs_Neue_Bold tracking-wide text-[#E2E7EE] mt-1">Рейтинг</p>
-      <div id="v-model-multiple-checkboxes" class="font-semibold">
-        <div class="flex items-center">
-          <input
-            class=""
-            type="checkbox"
-            id="5"
-            value="5"
-            v-model="filter.checkedRating"
-          />
-          <label class="flex items-center ml-2" for="5"
-            >5 <span class="text-[0.7rem] ml-0.5"></span> </label
-          ><br />
+    <div class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1">
+      <Dropdown />
+    </div>
+    <div>
+      <p
+        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1"
+      >
+        Степень инвалидности
+      </p>
+      <div
+        id="v-model-multiple-checkboxes"
+        class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
+      >
+        <div class="">
+          <input type="radio" id="invalidYes" name="invalid" value="0" />
+          <label class="ml-2" for="invalidYes">Да</label><br />
         </div>
-        <div class="flex items-center">
-          <input
-            type="checkbox"
-            id="4"
-            value="4"
-            v-model="filter.checkedRating"
-          />
-          <label class="flex items-center ml-2" for="4"
-            >4 <span class="text-[0.7rem] ml-0.5"></span></label
-          ><br />
+        <div class="">
+          <input type="radio" name="invalid" id="invalidNo" value="1" />
+          <label class="ml-2" for="invalidNo">Нет</label><br />
         </div>
-        <div class="flex items-center">
-          <input
-            type="checkbox"
-            id="3"
-            value="3"
-            v-model="filter.checkedRating"
-          />
-          <label class="flex items-center ml-2" for="3"
-            >3 <span class="text-[0.7rem] ml-0.5"></span></label
-          ><br />
+      </div>
+    </div>
+    <div>
+      <p
+        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1"
+      >
+        Надо обратно
+      </p>
+      <div
+        id="v-model-multiple-checkboxes"
+        class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
+      >
+        <div class="">
+          <input type="radio" id="BackYes" name="back" value="0" />
+          <label class="ml-2" for="BackYes">Да</label><br />
         </div>
-        <div class="flex items-center">
-          <input
-            type="checkbox"
-            id="2"
-            value="2"
-            v-model="filter.checkedRating"
-          />
-          <label class="flex items-center ml-2" for="2"
-            >2 <span class="text-[0.7rem] ml-0.5"></span></label
-          ><br />
-        </div>
-        <div class="flex items-center">
-          <input
-            type="checkbox"
-            id="1"
-            value="1"
-            v-model="filter.checkedRating"
-          />
-          <label class="flex items-center ml-2" for="1"
-            >1 <span class="text-[0.7rem] ml-0.5"></span></label
-          ><br />
-          
+        <div class="">
+          <input type="radio" name="back" id="BackNo" value="1" />
+          <label class="ml-2" for="BackNo">Нет</label><br />
         </div>
       </div>
     </div>
@@ -125,14 +52,15 @@
 <script>
 import { mapActions } from "vuex";
 import Button from "./Button.vue";
+import Dropdown from "./Dropdown.vue";
 export default {
-  components:{
-    Button
+  components: {
+    Button,
+    Dropdown,
   },
   methods: {
-    ...mapActions([
-      "SEND_FILTER_DATA"]),
-    },
+    ...mapActions(["SEND_FILTER_DATA"]),
+  },
   data() {
     return {
       filter: {
@@ -140,10 +68,10 @@ export default {
         checkedRating: [],
         selectedDate: [
           new Date(),
-          new Date(new Date().getTime() + 9 * 24 * 60 * 60 * 1000)
-        ]
-      }
-    }
-  }
-}
+          new Date(new Date().getTime() + 9 * 24 * 60 * 60 * 1000),
+        ],
+      },
+    };
+  },
+};
 </script>
