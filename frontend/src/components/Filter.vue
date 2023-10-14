@@ -1,16 +1,20 @@
 <template>
   <div>
     <div
-      class="font-TT_Firs_Neue_Bold flex justify-center tracking-wide text-[#E2E7EE] mt-2.5"
+      class="font-TT_Firs_Neue_Bold flex justify-start ml-4 tracking-wide text-[#E2E7EE] mt-2.5"
     >
       <Dropdown />
     </div>
     <div>
+      <div>
+        <!-- <Toggle /> -->
+      </div>
       <p
-        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1"
+        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-3"
       >
         Степень инвалидности
       </p>
+
       <div
         id="v-model-multiple-checkboxes"
         class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
@@ -55,10 +59,12 @@
 import { mapActions } from "vuex";
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
+// import Toggle from "./Toggle.vue";
 export default {
   components: {
     Button,
     Dropdown,
+    // Toggle,
   },
   methods: {
     ...mapActions(["SEND_FILTER_DATA"]),

@@ -1,7 +1,9 @@
 <template>
   <aside :class="classes">
     <div class="">
-      <LogoMain />
+      <div class="">
+        <LogoMain />
+      </div>
       <div class="mt-2.5">
         <SidebarNavItem
           v-for="(navItem, index) in navItems"

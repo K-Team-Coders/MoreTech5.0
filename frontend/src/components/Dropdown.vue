@@ -2,10 +2,10 @@
   <div class="relative" ref="dropdownContainer">
     <button
       @click="toggleDropdown"
-      class="flex items-center gap-2 py-0.5 px-2.5 text-lg bg-idealBlue transition duration-100 text-white rounded-md"
+      class="flex items-center justify-center gap-2 py-1 px-3 text-lg bg-idealBlue hover:bg-idealCian transition duration-100 text-white rounded-md"
     >
       Список услуг
-      <BaseIcon name="spisok" class="" />
+      <BaseIcon name="spisok" />
     </button>
     <transition
       enter-active-class="transition ease-out duration-300"
