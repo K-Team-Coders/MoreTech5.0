@@ -47,11 +47,13 @@
     <div v-if="selectedItems.length > 0" class="mt-2 flex">
       <ul class="flex justify-start gap-1 flex-wrap">
         <li
-          class="bg-idealBlue text-idealWhite rounded-full px-2 py-1 text-sm"
+          class="bg-blue-600 items-center gap-1 flex hover:bg-red-900 cursor-pointer text-idealWhite rounded-full px-2 py-1 text-sm"
           v-for="item in selectedItems"
           :key="item.id"
+          @click="removeItem(item)"
         >
           {{ item.name }}
+          <BaseIcon name="x" class="w-3 h-3"/>
         </li>
       </ul>
     </div>
@@ -118,6 +120,11 @@ export default {
       if (!this.$refs.dropdownContainer.contains(event.target)) {
         this.isOpen = false;
       }
+    },
+    removeItem(item) {
+      this.selectedItems = this.selectedItems.filter(
+        (selectedItem) => selectedItem !== item
+      );
     },
   },
 };
