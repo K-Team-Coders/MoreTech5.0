@@ -131,7 +131,6 @@ def modelingTalonAdded():
     logger.debug(f"Время получения талона -- {current_time}")
     logger.debug(f"Отделение -- {bank[0]}")
     logger.debug(f"Координаты -- {bank[1]} - {bank[2]}")
-
     try:
         cur.execute("INSERT INTO queue (service_time, service, timestamp, address, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s);", (service_time, service, current_time, bank[0], bank[1], bank[2]))
         conn.commit()
@@ -139,15 +138,17 @@ def modelingTalonAdded():
         logger.error(e)
         conn.rollback()
 
+    try:
+        cur.execute("DELETE FROM queue WHERE timestamp < CURRENT_TIMESTAMP - service_time * INTERVAL '1 minute';")
+        conn.commit()
+    except Exception as e:
+        logger.error(e)
+        
 @app.on_event("startup")
 def start_modeling():
     scheduler = BackgroundScheduler()
     scheduler.add_job(modelingTalonAdded, "interval", seconds=5)
     scheduler.start()
-
-@app.get("/videocam")
-def videocam(item: UploadFile):
-    pass
 
 def getAtmsCoords():
     results = []
@@ -174,21 +175,9 @@ def getOfficesCoords():
         results.append(result)
     return results
 
-@app.post("/addQueue")
-def addQueue(id: int, queue: int):
-    cur.execute()
-
-@app.get("/getAllBanks")
-def webAllBanks():
-    offices = getOfficesCoords()
-    atms = getAtmsCoords()
-    return JSONResponse(content={"offices": offices, "atms": atms}, status_code=200)
-
-@app.get("/getAllTimings")
-def allTimings():
+def getAllTimings():
     cur.execute("SELECT * FROM queue")
     data = cur.fetchall()
-
     preresult = []
     for index, subdata in enumerate(data):
         data = {
@@ -198,14 +187,21 @@ def allTimings():
             "longitude": subdata[6]
         } 
         preresult.append(data)
-
-    unique_address = set([x["address"] for x in preresult])
+    unique_address = set([(x["address"], x["lattitude"], x["longitude"]) for x in preresult])
     result = []
-    for address in unique_address:
-        timing = sum([x["service_time"] for x in preresult])
+    for address, lattitude, longitude in unique_address:
+        timing = sum([x["service_time"] for x in preresult if x["address"] == address])
         result.append({
             "address": address,
+            "lattitude": lattitude,
+            "longitude": longitude,
             "time": timing
         })
+    return result
 
-    return JSONResponse(status_code=200, content={"data": result})
+@app.get("/getAllBanks")
+def webAllBanks():
+    offices = getOfficesCoords()
+    atms = getAtmsCoords()
+    timings = getAllTimings()
+    return JSONResponse(content={"offices": offices, "atms": atms, "timings": timings}, status_code=200)
