@@ -4,6 +4,9 @@
       <div class="mb-4">
         <Map :postamat_list="allpostamats.data"> </Map>
       </div>
+      <div>
+        <RightDropSidebar />
+      </div>
       <div
         class="px-5 py-3 shadow-innerMax h-full"
         v-show="$attrs.activeindex === 1"
@@ -18,9 +21,11 @@
 <script>
 import Map from "@/components/Map.vue";
 import axios from "axios";
+import RightDropSidebar from "./RightDropSidebar.vue";
 export default {
   components: {
     Map,
+    RightDropSidebar,
   },
 
   methods: {},
