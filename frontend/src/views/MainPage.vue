@@ -22,7 +22,8 @@ export default {
     LoadingScreen,
   },
   computed: {
-    ...mapGetters(["allpostamats"]),
+    ...mapGetters(["allpostamats", "selected_filter"]),
+
   },
   data() {
     return {
@@ -37,8 +38,8 @@ export default {
     }
   },
   async created() {
-    this.GET_ALLPOSTAMATS();
-    setInterval(() => this.GET_ALLPOSTAMATS(), 300000)
+    this.GET_ALLPOSTAMATS(this.selected_filter);
+    setInterval(() => this.GET_ALLPOSTAMATS(this.selected_filter), 300000)
   },
 };
 </script>
