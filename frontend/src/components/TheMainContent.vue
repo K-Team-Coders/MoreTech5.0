@@ -2,7 +2,7 @@
   <div class="ml-64 pt-[70px] font-Montserrat">
     <div class="px-5 py-4 h-full bg-white" v-show="$attrs.activeindex === 0">
       <div class="grid grid-cols-3 gap-3 mb-4">
-      <Map :postamat_list="allpostamats.data"> </Map>
+      <Map :postamat_list="allpostamats"> </Map>
     </div>
     <div
       class="px-5 py-3 shadow-innerMax h-full"

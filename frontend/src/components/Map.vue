@@ -2,14 +2,18 @@
   <div class="border-idealRed border-[6px] rounded-lg shadow-cards">
     <yandex-map :coords="coords" :use-object-manager="true" :object-manager-clusterize="true" :settings="settings"
       :zoom="5" :cluster-options="clusterOptions">
-      <ymap-marker v-for="item in postamat_list" :key="item.id" :coords="[item.latitude, item.longitude]"
+      <ymap-marker v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
         :markerId="item.id" :cluster-name="1"
         :balloon="{
-          header: `Заказ № ${item.article}` +
-            `от ${item.reviewdate}` +
-            ` ${item.adress} `,
-          body: `Отзыв:` + `${item.usertext} `  , 
-          footer: `Предсказанный класс:` + `${item.namedclassnumber} `  + `Маркет-плейс:${item.seller} `+ `Рейтинг:` + ` ${item.mark} `
+          header: `Наименование: ${item.name}` ,
+          body: `Адрес:` + `${item.address} `  , 
+        }" />
+        <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
+        :markerId="item.id" :cluster-name="2"
+        :preset="islandsredIcon" 
+        :balloon="{
+          header: `Наименование: ${item.name}` ,
+          body: `Адрес:` + `${item.address} `  , 
         }" />
     </yandex-map>
   </div>
