@@ -14,19 +14,8 @@
       >
         Степень инвалидности
       </p>
-
-      <div
-        id="v-model-multiple-checkboxes"
-        class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
-      >
-        <div class="">
-          <input type="radio" id="invalidYes" name="invalid" value="0" />
-          <label class="ml-2" for="invalidYes">Да</label><br />
-        </div>
-        <div class="">
-          <input type="radio" name="invalid" id="invalidNo" value="1" />
-          <label class="ml-2" for="invalidNo">Нет</label><br />
-        </div>
+      <div class="ml-4 mt-1">
+        <Toggle id="invalid" />
       </div>
     </div>
     <div>
@@ -35,18 +24,8 @@
       >
         Учитывать обратный маршрут
       </p>
-      <div
-        id="v-model-multiple-checkboxes"
-        class="ml-4 mt-1.5 font-semibold text-[#E2E7EE] text-[14px]"
-      >
-        <div class="">
-          <input type="radio" id="BackYes" name="back" value="0" />
-          <label class="ml-2" for="BackYes">Да</label><br />
-        </div>
-        <div class="">
-          <input type="radio" name="back" id="BackNo" value="1" />
-          <label class="ml-2" for="BackNo">Нет</label><br />
-        </div>
+      <div class="ml-4 mt-2.5">
+        <Toggle id="road" />
       </div>
     </div>
     <div class="absolute left-0 bottom-0">
@@ -59,12 +38,12 @@
 import { mapActions } from "vuex";
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
-// import Toggle from "./Toggle.vue";
+import Toggle from "./Toggle.vue";
 export default {
   components: {
     Button,
     Dropdown,
-    // Toggle,
+    Toggle,
   },
   methods: {
     ...mapActions(["SEND_FILTER_DATA"]),
