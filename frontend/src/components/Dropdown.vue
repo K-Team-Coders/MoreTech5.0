@@ -45,9 +45,9 @@
       </div>
     </transition>
     <div v-if="selectedItems.length > 0" class="mt-2 flex">
-      <ul class="flex justify-start gap-2 flex-wrap">
+      <ul class="flex justify-start gap-1 flex-wrap">
         <li
-          class="bg-idealSilver text-idealDarkGray rounded-full px-2 py-1 text-sm"
+          class="bg-idealBlue text-idealWhite rounded-full px-2 py-1 text-sm"
           v-for="item in selectedItems"
           :key="item.id"
         >
