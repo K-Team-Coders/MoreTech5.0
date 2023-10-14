@@ -2,7 +2,7 @@
   <button
     :class="
       $attrs.classes ||
-      'bg-idealRed hover:shadow-innerMax text-white font-bold w-64 h-10'
+      'bg-idealBlue hover:shadow-innerMax text-white font-bold w-64 h-10'
     "
   >
     <p class="mr-2 mt-[2.5px]">

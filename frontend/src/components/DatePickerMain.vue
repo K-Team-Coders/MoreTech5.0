@@ -36,7 +36,7 @@ export default {
 <style>
 .Datepicker {
   --v-calendar-picker-color: #2f3342;
-  --v-calendar-input-bg-color: #ff1935;
+  --v-calendar-input-bg-color: #4319ff;
   --v-calendar-select-bg-color: #2f3342;
   --v-calendar-border-color: #000000;
   --v-calendar-triangle-color: #000000;
@@ -50,7 +50,7 @@ export default {
   --v-calendar-datepicker-icon-size: 1rem;
   --v-calendar-active-bg-color: #ff193400;
   --v-calendar-active-text-color: #ffffff;
-  --v-calendar-range-bg-color: #ff1935;
+  --v-calendar-range-bg-color: #4319ff;
   --v-calendar-view-button-font-weight: 00;
   --v-calendar-view-button-font-size: 1.1rem;
   --v-calendar-range-text-color: #ffffff;

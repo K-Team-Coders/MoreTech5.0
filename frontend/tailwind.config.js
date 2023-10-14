@@ -16,9 +16,10 @@ module.exports = {
       colors: {
         idealWhite: "#f5f5f5",
         idealRed: "#FF1935",
+        idealBlue:"#0000ff",
         idealDarkGray: "#2F3342",
         idealSilver: "#E2E7EE",
-        "idealLight Gray": "#BFCADA",
+        idealLightGray: "#BFCADA",
       },
       boxShadow: {
         "3xl": "0px 4px 7px 4px rgba(0, 0, 0, 0.3)",

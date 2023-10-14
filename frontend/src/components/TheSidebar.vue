@@ -55,8 +55,6 @@ export default {
       navItems: [
         { label: "Карта", icon: "map" },
         { label: "Статистика", icon: "dashboard" },
-        { label: "Таблица", icon: "table" },
-        { label: "Классификация", icon: "box" },
       ],
     };
   },

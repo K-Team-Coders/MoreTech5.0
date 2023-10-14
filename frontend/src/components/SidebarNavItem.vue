@@ -37,7 +37,7 @@ export default {
             ...classes,
             'font-semibold',
             'text-white',
-            'bg-idealRed',
+            'bg-idealBlue',
             'shadow-3xl'
           ]
         : [...classes, 'hover:shadow-innerMax']
