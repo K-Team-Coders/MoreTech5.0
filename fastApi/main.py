@@ -113,8 +113,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# def bankAvaiability():
-
 def modelingTalonAdded():
     """
     Каждые N секунд добавляется человек в очередь в рандомное отделение
@@ -143,7 +141,7 @@ def modelingTalonAdded():
         conn.commit()
     except Exception as e:
         logger.error(e)
-        
+
 @app.on_event("startup")
 def start_modeling():
     scheduler = BackgroundScheduler()
