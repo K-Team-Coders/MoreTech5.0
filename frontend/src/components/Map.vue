@@ -3,17 +3,12 @@
     <yandex-map :coords="coords" :use-object-manager="true" :object-manager-clusterize="true" :settings="settings"
       :zoom="5" :cluster-options="clusterOptions">
       <ymap-marker v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
-        :markerId="item.id" :cluster-name="1" :balloon="{
-          header: `Наименование: ${item.name}`,
-          body: `Адрес:` + `${item.address} `,
-        }"
-        :icon ="markerIconBANK"
-          />
+        :markerId="item.id" :cluster-name="1"  :icon="markerIconBANK"
+        :balloon-template="balloonTemplate(item)" />
       <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
-        :markerId="item.id" :cluster-name="2" :preset="islandsredIcon" :balloon="{
+        :markerId="item.id" :cluster-name="2" :balloon="{
           header: `Банкомат ВТБ: ${item.address}`,
-        }"
-        :icon = "markerIconATM" />
+        }" :icon="markerIconATM" />
     </yandex-map>
   </div>
 </template>
@@ -31,8 +26,20 @@ const settings = {
 
 export default {
   components: { yandexMap, ymapMarker },
-  computed: {},
-
+  computed: {
+    
+  },
+  methods: {
+    balloonTemplate(item) {
+      let one_day
+      return `
+        <h1 class="red">${ item.name } </h1>
+        <a>Адрес:  ${ item.address } </a>
+        <ul> Расписание работы:
+          <li v-for="${one_day} in ${item.openHours}" ">  {{one_day.days }} : {{ one_day.hours}} </li>
+        
+      `}
+  },
   data() {
     return {
 
@@ -55,9 +62,7 @@ export default {
       },
 
       clusterOptions: {
-        clusterOptions: {
-          1: {
-            preset: `islands#redClusterIcons`,
+        1: {
             clusterDisableClickZoom: false,
             clusterOpenBalloonOnClick: true,
             clusterBalloonLayout: [
@@ -70,18 +75,17 @@ export default {
 
           },
         },
-      },
-    };
 
-  },
-  props: {
-    postamat_list: Array,
-  },
-
-};
+      }
+    },
+      props: {
+      postamat_list: Array,}}
 </script>
 
 <style>
+.red {
+  color: red;
+}
 .ymap-container {
   width: 100%;
   height: 76vh;

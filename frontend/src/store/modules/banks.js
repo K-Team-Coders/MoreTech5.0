@@ -29,11 +29,11 @@ export default {
       context.commit("SET_ALLPOSTAMATS", postamats_list.data);
       console.log(postamats_list.data)
     },
-    SEND_FILTER_DATA: async (context,filterdata) => {
-      await axios.post('http://178.170.196.251:8081/getAdminPageData/', filterdata).then(response => {
-        let postamats_list = response; 
-        context.commit("SET_ALLPOSTAMATS", postamats_list.data)});
+    // SEND_FILTER_DATA: async (context,filterdata) => {
+    //   await axios.post('http://178.170.196.251:8081/getAdminPageData/', filterdata).then(response => {
+    //     let postamats_list = response; 
+    //     context.commit("SET_ALLPOSTAMATS", postamats_list.data)});
       
     
-    },
+    // },
 }}
