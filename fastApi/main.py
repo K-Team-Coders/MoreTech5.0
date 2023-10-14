@@ -1,10 +1,12 @@
 import os
 import datetime
 import time
+import copy
 import json
 import random
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
+from math import radians, cos, sin, asin, sqrt 
 
 import psycopg2
 from loguru import logger
@@ -75,6 +77,7 @@ for index, atm in enumerate(atms["atms"]):
     result["address"] = atm["address"]   
     result["longitude"] = atm["longitude"]
     result["latitude"] = atm["latitude"]
+    result["services"] = atm["services"]
     results_atms.append(result)
 
 DBenv = Path().cwd().parent.joinpath("DB.env")
@@ -136,11 +139,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def modelingCameraAdded():
-    """
-    Каждые N секунд в отделение заходит посетитель в случайное отделение
-    Зная по историческим данным среднее время обслуживание каждой услуги, не зная конкретно что может понадобиться посетителю, возьмем 
-    """
+# For calculating the distance in Kilometres  
+def distance_1(La1, La2, Lo1, Lo2): 
+      
+    # The math module contains the function name "radians" which is used for converting the degrees value into radians. 
+    Lo1 = radians(Lo1) 
+    Lo2 = radians(Lo2) 
+    La1 = radians(La1) 
+    La2 = radians(La2) 
+       
+    # Using the "Haversine formula" 
+    D_Lo = Lo2 - Lo1 
+    D_La = La2 - La1 
+    P = sin(D_La / 2)**2 + cos(La1) * cos(La2) * sin(D_Lo / 2)**2 
+  
+    Q = 2 * asin(sqrt(P)) 
+     
+    # The radius of earth in kilometres. 
+    R_km = 6371 
+       
+    # Then, we will calculate the result 
+    return(Q * R_km) 
 
 def modelingTalonAdded():
     """
@@ -202,22 +221,47 @@ def getAllTimings():
     return result
 
 @app.post("/getAllBanks")
-def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[list] = [], invalid: Optional[bool] = None, backway: Optional[bool] = False):
+def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[str] = [], blind: Optional[bool] = None, immobile: Optional[bool] = None, backway: Optional[bool] = False):
     offices = []
-    logger.debug(filter)
+    atms = results_atms
     # Чек на фильтры
+    
     if filter:
-        for subfilter in filter:
+        for subfilter in filter.split("//"):
             suboffice = [office for office in results_office if subfilter in office["services"]]
-            offices.extend(suboffice)
-        offices = list(set(offices))
+            offices = [office for office in suboffice if office not in offices]
     else:
         offices = results_office
 
     # Чек на инвалида
-    if type(invalid) != type(None):
-        logger.debug(invalid)
+    if type(blind) != type(None):
+        if blind:
+            atms = [atm for atm in atms if atm["services"]["blind"]["serviceActivity"] == "AVAILABLE"]
 
-    atms = results_atms
+    if type(immobile) != type(None):
+        if immobile:
+            atms = [atm for atm in atms if atm["services"]["wheelchair"]["serviceActivity"] == "AVAILABLE"]
+
     timings = getAllTimings()
-    return JSONResponse(content={"offices": offices, "atms": atms, "timings": timings}, status_code=200)
+    timings_addresses = [timing["address"] for timing in timings]
+    timings_times = [timing["time"] for timing in timings]
+
+    results_offices = []
+    for office in offices:
+        if office["name"] in timings_addresses:
+            dicted = copy.deepcopy(office)
+            dicted["timing"] = timings_times[timings_addresses.index(office["name"])]
+            results_offices.append(dicted)
+
+    cleaned_offices = []
+    # Обработка координат
+    for office in results_offices:
+        if distance_1(lattitude, office["latitude"], longitude, office["longitude"]) < 10:
+            cleaned_offices.append(office)
+
+    cleaned_atms = []
+    for atm in atms:
+        if distance_1(lattitude, atm["latitude"], longitude, atm["longitude"]) < 10:
+            cleaned_atms.append(atm)
+
+    return JSONResponse(content={"offices": cleaned_offices, "atms": cleaned_atms, "timings": timings}, status_code=200)
