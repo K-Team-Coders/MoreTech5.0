@@ -20,7 +20,7 @@
 
 <script>
 import { yandexMap, ymapMarker } from "vue-yandex-maps";
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 const settings = {
   apiKey: "06856716-badb-42a6-9815-4c8e630af04b",
@@ -34,14 +34,8 @@ export default {
   components: { yandexMap, ymapMarker },
   computed: {
     ...mapGetters(['selected_filter']),
-    bank_list() {
-      const requiredServices = this.selected_filter;
-      const filteredData = this.postamat_list.offices.filter(item => {
-        return item.services.some(service => requiredServices.includes(service));
-      });
-
-      return filteredData;
-    },
+    
+    
 
   },
 
@@ -91,8 +85,10 @@ data() {
   };
 },
 methods: {
+  ...mapActions(['GET_MYCOORDS']),
   changeMyPos(e) {
       this.my_coords = e.get('coords');
+      this.GET_MYCOORDS(this.my_coords)
     },
   balloonTemplate(item) {
     return `
@@ -100,6 +96,7 @@ methods: {
       }</h1>
     <a class="font-semibold font-TT_Firs_Neue_Regular text-base">Адрес: ${item.address
       }</a>
+      <p> Ожидаемое время конца очереди, мин: ${item.timing} </p>
     <ul class="font-TT_Firs_Neue_Regular"><span class="font-bold text-idealBlue">Расписание работы:</span>
       ${item.openHours
         .map((item) => `<li>${item.days}: ${item.hours}</li>`)
@@ -108,6 +105,7 @@ methods: {
     <ul class="font-TT_Firs_Neue_Regular"><span class="font-bold text-idealBlue">Категории:</span>
       ${item.services.map((service) => `<li>${service}</li>`).join("")}
     </ul>
+    
   `;
   },
 },
