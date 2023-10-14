@@ -8,7 +8,10 @@
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transform opacity-0 scale-95"
     >
-      <div class="md:px-5 py-4 h-full bg-white" v-show="$attrs.activeindex === 0">
+      <div
+        class="md:px-5 py-4 h-full bg-white"
+        v-show="$attrs.activeindex === 0"
+      >
         <div class="mb-4">
           <Map :postamat_list="allpostamats"></Map>
         </div>
@@ -26,13 +29,9 @@
       leave-from-class="transform opacity-100 scale-100"
       leave-to-class="transform opacity-0 scale-95"
     >
-      <div
-        class="px-5 py-3 shadow-innerMax h-full"
-        v-if="$attrs.activeindex === 1"
-      >
-        <div class="h-full py-12">
-          <div class="flex flex-row justify-center gap-2">ssss</div>
-        </div>
+      <div class="px-5 py-3 h-full" v-if="$attrs.activeindex === 1">
+        <UploadForm />
+        <DropDownOffice />
       </div>
     </transition>
   </div>
@@ -40,12 +39,16 @@
 
 <script>
 import Map from "@/components/Map.vue";
+import DropDownOffice from "@/components/DropDownOffice.vue";
 import axios from "axios";
-import RightDropSidebar from "./RightDropSidebar.vue";
+import RightDropSidebar from "@/components/RightDropSidebar.vue";
+import UploadForm from "@/components/UploadForm.vue";
 export default {
   components: {
     Map,
     RightDropSidebar,
+    UploadForm,
+    DropDownOffice,
   },
   props: {
     allpostamats: Object,

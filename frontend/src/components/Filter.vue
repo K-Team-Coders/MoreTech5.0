@@ -20,7 +20,7 @@
         <!-- <Toggle /> -->
       </div>
       <p
-        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-3"
+        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-2"
       >
         Слабовидящий гражданин
       </p>
