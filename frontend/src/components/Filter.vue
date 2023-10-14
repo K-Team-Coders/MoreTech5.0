@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1">
+    <div
+      class="font-TT_Firs_Neue_Bold flex justify-center tracking-wide text-[#E2E7EE] mt-2.5"
+    >
       <Dropdown />
     </div>
     <div>
@@ -25,13 +27,13 @@
     </div>
     <div>
       <p
-        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1"
+        class="text-lg leading-[21px] font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-2"
       >
-        Надо обратно
+        Учитывать обратный маршрут
       </p>
       <div
         id="v-model-multiple-checkboxes"
-        class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
+        class="ml-4 mt-1.5 font-semibold text-[#E2E7EE] text-[14px]"
       >
         <div class="">
           <input type="radio" id="BackYes" name="back" value="0" />
