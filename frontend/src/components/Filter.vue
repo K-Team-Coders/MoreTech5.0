@@ -6,9 +6,6 @@
       <Dropdown />
     </div>
     <div>
-      <div>
-        <!-- <Toggle /> -->
-      </div>
       <p
         class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-3"
       >
@@ -66,7 +63,7 @@ export default {
     ...mapActions(["GET_ALLPOSTAMATS"]),
   },
   computed: {
-    ...mapGetters(["selected_filter"])
+    ...mapGetters(["selected_filter"]),
   },
   data() {
     return {
