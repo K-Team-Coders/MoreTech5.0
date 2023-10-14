@@ -1,10 +1,7 @@
 <template>
   <aside :class="classes">
     <div class="">
-      <div class="">
-        <LogoMain />
-      </div>
-      <div class="mt-2.5">
+      <div class="mt-24">
         <SidebarNavItem
           v-for="(navItem, index) in navItems"
           :key="index"
@@ -27,13 +24,11 @@
 <script>
 import Filter from "./Filter.vue";
 import Button from "./Button.vue";
-import LogoMain from "./LogoMain.vue";
 import SidebarNavItem from "./SidebarNavItem.vue";
 export default {
   components: {
     Filter,
     Button,
-    LogoMain,
     SidebarNavItem,
   },
 
@@ -44,7 +39,7 @@ export default {
         "fixed",
         "top-0",
         "bg-[#2F3342]",
-        "z-50",
+        "z-30",
         "h-screen",
         "font-TT_Firs_Neue_Regular",
       ];

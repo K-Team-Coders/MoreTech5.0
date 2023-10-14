@@ -1,11 +1,11 @@
 <template>
-  <div class="relative" ref="dropdownContainer">
+  <div class="relative" ref="dropdownContainer2 ">
     <button
       @click="toggleDropdown"
       class="flex items-center justify-center gap-2 py-1 px-3 text-lg bg-idealBlue hover:bg-idealCian transition duration-100 text-white rounded-md"
     >
-      Список услуг
-      <BaseIcon name="spisok" />
+      Список отделений (адреса)
+      <BaseIcon name="menu" />
     </button>
     <transition
       enter-active-class="transition ease-out duration-300"
@@ -22,7 +22,7 @@
       >
         <input
           type="text"
-          v-model="searchQuery"
+          v-model="searchQuery2"
           placeholder="Поиск"
           class="w-full px-2 py-0.5 mb-2 text-black rounded-md border border-gray-300"
         />
@@ -61,7 +61,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { ref, computed } from "vue";
 import { mapActions, mapGetters } from "vuex";
@@ -73,34 +72,8 @@ export default {
       isOpen: false,
       searchQuery: "",
       items: [
-        { id: 1, name: "Кредит наличными" },
-        { id: 2, name: "Экспресс-кредит" },
-        { id: 3, name: "Рефинансирование" },
-        { id: 4, name: "Кредит под залог недвижимости" },
-        { id: 5, name: "Дебетовые карты" },
-        { id: 6, name: "Кредитные карты" },
-        { id: 7, name: "Пенсионные карты" },
-        { id: 8, name: "Карты жителя" },
-        { id: 9, name: "Социальные карты" },
-        { id: 10, name: "Ипотека на готовый дом" },
-        { id: 11, name: "Ипотека на строящийся дом" },
-        { id: 12, name: "Кредит под залог имеющейся недвижимости" },
-        { id: 13, name: "Ипотека на машино-места и кладовки" },
-        { id: 14, name: "Ипотека с материнским капиталом" },
-        { id: 15, name: "Вклады" },
-        { id: 16, name: "Операции по счету" },
-        { id: 17, name: "Операции по инвестициям" },
-        { id: 18, name: "Обмен валют" },
-        { id: 19, name: "Оплата ЖКХ" },
-        { id: 20, name: "Расчетный счет" },
-        { id: 21, name: "Регистрация бизнеса" },
-        { id: 22, name: "Кредиты" },
-        { id: 22, name: "Бизнес-карты" },
-        { id: 23, name: "Эквайринг" },
-        { id: 24, name: "Депозиты" },
-        { id: 25, name: "ВЭД" },
-        { id: 26, name: "Гарантии и аккредитивы" },
-        { id: 27, name: "Сервисы для бизнеса" },
+        { id: 345, name: "Кредит наличными" },
+
       ],
       selectedItems: [],
     };
