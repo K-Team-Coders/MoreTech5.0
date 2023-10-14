@@ -25,7 +25,7 @@ export default {
   },
   actions: {
     GET_ALLPOSTAMATS: async (context, payload) => {
-      let postamats_list = await axios.get('http://26.200.185.61:8080/offices');
+      let postamats_list = await axios.get('http://26.200.185.61:8080/getAllBanks');
       context.commit("SET_ALLPOSTAMATS", postamats_list.data);
       console.log(postamats_list.data)
     },
@@ -34,6 +34,6 @@ export default {
         let postamats_list = response; 
         context.commit("SET_ALLPOSTAMATS", postamats_list.data)});
       
-      console.log(filterdata);
+    
     },
 }}
