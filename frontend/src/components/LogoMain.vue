@@ -1,7 +1,7 @@
 <template>
-  <a href="" class="flex flex-col items-center justify-center pt-3">
+  <a href="" class="md:ml-4 ml-12">
     <div class="">
-      <img src="../image/VTB_logo-add_ru_rgb.png" class="h-28"/>
+      <img src="../image/VTB_logo-add_ru_rgb.png" class="h-[70px]"/>
     </div>
   </a>
 </template>
