@@ -1,57 +1,70 @@
 <template>
-  <div>
-    <transition
-      enter-active-class="transition ease-in-out duration-200 transform"
-      enter-from-class="transform -translate-x-full"
-      enter-to-class="translate-x-0"
-      leave-active-class="transition ease-in-out duration-200 transform"
-      leave-from-class="translate-x-0"
-      leave-to-class="-translate-x-full"
-    >
-      <div
-        class="relative inline-flex items-center h-6 rounded-full w-12 cursor-pointer"
-        :class="{ 'bg-green-500': isActive, 'bg-red-500': !isActive }"
-        @click="toggle"
-      >
-        <div
-          class="absolute w-4 h-4 bg-white rounded-full shadow-md"
-          :class="{ 'translate-x-full': isActive }"
-        ></div>
-      </div>
-    </transition>
-  </div>
+  <label class="switch switch200">
+    <input id="" type="checkbox" />
+    <span class="slider slider200"></span>
+  </label>
 </template>
-
 <script>
 export default {
-  data() {
-    return {
-      isActive: false,
-    };
-  },
-  methods: {
-    toggle() {
-      this.isActive = !this.isActive;
-    },
-  },
+  props: ["id"],
 };
 </script>
-
 <style>
-.bg-green-500 {
-  background-color: #48bb78;
+.switch input {
+  display: none;
 }
 
-.bg-red-500 {
-  background-color: #f56565;
+.switch {
+  display: inline-block;
+  width: 60px; /*=w*/
+  height: 25px; /*=h*/
+  position: relative;
 }
 
-.translate-x-full {
-  transform: translateX(100%);
+.slider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 30px;
+  box-shadow: 0 0 0 2px #7696a7, 0 0 4px #7696a7;
+  cursor: pointer;
+  border: 4px solid transparent;
+  overflow: hidden;
+  transition: 0.2s;
 }
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.3s;
+.slider:before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: #7696a7;
+  border-radius: 30px;
+  transform: translateX(-30px); /*translateX(-(w-h))*/
+  transition: 0.2s;
+}
+
+input:checked + .slider:before {
+  transform: translateX(30px); /*translateX(w-h)*/
+  background-color: limeGreen;
+}
+
+input:checked + .slider {
+  box-shadow: 0 0 0 2px limeGreen, 0 0 8px limeGreen;
+}
+
+.switch200 .slider:before {
+  width: 200%;
+  transform: translateX(-82px); /*translateX(-(w-h))*/
+}
+
+.switch200 input:checked + .slider:before {
+  background-color: #00aaff;
+}
+
+.switch200 input:checked + .slider {
+  box-shadow: 0 0 0 2px #00aaff, 0 0 8px #00aaff;
 }
 </style>
