@@ -27,9 +27,10 @@ export default {
   },
   actions: {
     GET_ALLPOSTAMATS: async (context,  payload ) => {
-      console.log(payload.join('//'))
+      let filter = payload.map(obj => obj.name);
       let  postamats_list;
-      await axios.post('http://26.200.185.61:8080/getAllBanks', payload.join('//')).then((response) => {
+      console.log(payload.map(obj => obj.name));
+      await axios.post(`http://26.200.185.61:8080/getAllBanks?lattitude=0&longitude=0&filter=${filter.join('//')}&backway=false`).then((response) => {
       postamats_list = response;
       })
       context.commit("SET_ALLPOSTAMATS", postamats_list.data);
