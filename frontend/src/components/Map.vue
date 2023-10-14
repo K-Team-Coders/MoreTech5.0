@@ -37,10 +37,9 @@ export default {
         <a>Адрес:  ${ item.address } </a>
         <ul> Расписание работы:
           <li v-for="${one_day} in ${item.openHours}" ">  {{one_day.days }} : {{ one_day.hours}} </li>
-          <li v-for="${one_day} in ${item.openHours}" ">  {{one_day.days }} : {{ one_day.hours}} </li>
-          <li v-for="${one_day} in ${item.openHours}" ">  {{one_day.days }} : {{ one_day.hours}} </li>
+         
 
-        
+      </ul>
       `}
   },
   data() {
