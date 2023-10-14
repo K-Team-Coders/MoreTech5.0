@@ -1,4 +1,5 @@
 import os
+import datetime
 import time
 import json
 import random
@@ -10,6 +11,7 @@ from fastapi import FastAPI, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from apscheduler.schedulers.background import BackgroundScheduler
 
 timings = {
     "Кредит наличными": 7.6,
@@ -111,18 +113,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-def root():
-    return {"message": "Hello World"}
+# def bankAvaiability():
 
-# def countStats():
-    # cur.execute("SELECT * FROM ")
+def modelingTalonAdded():
+    """
+    Каждые N секунд добавляется человек в очередь в рандомное отделение
+    Случайно выбирается отделение, случайно выбирается услуга
+    Для каждой услуги предложено свое время (в соответсвии с реальными историческими данными)
+    Через M секунд талончик обслуживается и удаляется из временной БД.
+    """
+    service = random.choice(list(timings.keys()))
+    service_time = timings[service]
+    current_time = datetime.datetime.now()
+    bank = random.choice([(x["salePointName"], x["latitude"], x["longitude"]) for x in offices])
+
+    logger.debug(f"Талон -- {service} {service_time}")
+    logger.debug(f"Время получения талона -- {current_time}")
+    logger.debug(f"Отделение -- {bank[0]}")
+    logger.debug(f"Координаты -- {bank[1]} - {bank[2]}")
+
+    try:
+        cur.execute("INSERT INTO queue (service_time, service, timestamp, address, latitude, longitude) VALUES (%s, %s, %s, %s, %s, %s);", (service_time, service, current_time, bank[0], bank[1], bank[2]))
+        conn.commit()
+    except Exception as e:
+        logger.error(e)
+        conn.rollback()
+
+@app.on_event("startup")
+def start_modeling():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(modelingTalonAdded, "interval", seconds=5)
+    scheduler.start()
 
 @app.get("/videocam")
 def videocam(item: UploadFile):
-    pass
-
-def addQueue():
     pass
 
 def getAtmsCoords():
@@ -133,13 +157,11 @@ def getAtmsCoords():
         result["address"] = atm["address"]   
         result["longitude"] = atm["longitude"]
         result["latitude"] = atm["latitude"]
-
         results.append(result)
     return results
 
 def getOfficesCoords():
     results = []
-        
     for index, office in enumerate(offices):
         result = {}
         result["id"] = index
@@ -152,12 +174,38 @@ def getOfficesCoords():
         results.append(result)
     return results
 
+@app.post("/addQueue")
+def addQueue(id: int, queue: int):
+    cur.execute()
+
 @app.get("/getAllBanks")
 def webAllBanks():
     offices = getOfficesCoords()
     atms = getAtmsCoords()
     return JSONResponse(content={"offices": offices, "atms": atms}, status_code=200)
 
-@app.get("/videocam")
-def videocam(item: UploadFile):
-    pass
+@app.get("/getAllTimings")
+def allTimings():
+    cur.execute("SELECT * FROM queue")
+    data = cur.fetchall()
+
+    preresult = []
+    for index, subdata in enumerate(data):
+        data = {
+            "service_time": subdata[1],
+            "address": subdata[4],
+            "lattitude": subdata[5],
+            "longitude": subdata[6]
+        } 
+        preresult.append(data)
+
+    unique_address = set([x["address"] for x in preresult])
+    result = []
+    for address in unique_address:
+        timing = sum([x["service_time"] for x in preresult])
+        result.append({
+            "address": address,
+            "time": timing
+        })
+
+    return JSONResponse(status_code=200, content={"data": result})
