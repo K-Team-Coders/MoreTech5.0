@@ -8,7 +8,7 @@
     leave-from-class="transform opacity-100 scale-100"
     leave-to-class="transform opacity-0 scale-95"
     >
-      <div class="px-5 py-4 h-full bg-white " v-show="$attrs.activeindex === 0">
+      <div class="px-5 py-4 h-full bg-white" v-show="$attrs.activeindex === 0">
         <div class="mb-4">
           <Map :postamat_list="allpostamats"></Map>
         </div>

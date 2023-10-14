@@ -1,14 +1,33 @@
 <template>
   <div class="border-idealBlue border-[6px] rounded-lg shadow-cards">
-    <yandex-map :coords="coords" :use-object-manager="true" :object-manager-clusterize="true" :settings="settings"
-      :zoom="5" :cluster-options="clusterOptions">
-      <ymap-marker v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
-        :markerId="item.id" :cluster-name="1"  :icon="markerIconBANK"
-        :balloon-template="balloonTemplate(item)" />
-      <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
-        :markerId="item.id" :cluster-name="2" :balloon="{
+    <yandex-map
+      :coords="coords"
+      :use-object-manager="true"
+      :object-manager-clusterize="true"
+      :settings="settings"
+      :zoom="5"
+      :cluster-options="clusterOptions"
+    >
+      <ymap-marker
+        v-for="item in postamat_list.offices"
+        :key="item.id"
+        :coords="[item.latitude, item.longitude]"
+        :markerId="item.id"
+        :cluster-name="1"
+        :icon="markerIconBANK"
+        :balloon-template="balloonTemplate(item)"
+      />
+      <ymap-marker
+        v-for="item in postamat_list.atms"
+        :key="item.id"
+        :coords="[item.latitude, item.longitude]"
+        :markerId="item.id"
+        :cluster-name="2"
+        :balloon="{
           header: `Банкомат ВТБ: ${item.address}`,
-        }" :icon="markerIconATM" />
+        }"
+        :icon="markerIconATM"
+      />
     </yandex-map>
   </div>
 </template>
@@ -26,38 +45,42 @@ const settings = {
 
 export default {
   components: { yandexMap, ymapMarker },
-  computed: {
-    
-  },
+  computed: {},
   methods: {
     balloonTemplate(item) {
-      let one_day
       return `
-        <h1 class="red">${ item.name } </h1>
-        <a>Адрес:  ${ item.address } </a>
-        <ul> Расписание работы:
-          <li v-for="${one_day} in ${item.openHours}" ">  {{one_day.days }} : {{ one_day.hours}} </li>
-         
-
-      </ul>
-      `}
+    <h1 class="text-idealBlue text-xl font-bold font-TT_Firs_Neue_Regular">${
+      item.name
+    }</h1>
+    <a class="font-semibold font-TT_Firs_Neue_Regular text-base">Адрес: ${
+      item.address
+    }</a>
+    <ul class="font-TT_Firs_Neue_Regular"><span class="font-bold text-idealBlue">Расписание работы:</span>
+      ${item.openHours
+        .map((item) => `<li>${item.days}: ${item.hours}</li>`)
+        .join("")}
+    </ul>
+    <ul class="font-TT_Firs_Neue_Regular"><span class="font-bold text-idealBlue">Категории:</span>
+      ${item.services.map((service) => `<li>${service}</li>`).join("")}
+    </ul>
+  `;
+    },
   },
   data() {
     return {
-
       coords: [55.753215, 36.622504],
       settings: settings,
 
       markerIconATM: {
-        layout: 'default#imageWithContent',
-        imageHref: 'https://cdn-icons-png.flaticon.com/128/6059/6059866.png',
+        layout: "default#imageWithContent",
+        imageHref: "https://cdn-icons-png.flaticon.com/128/6059/6059866.png",
         imageSize: [43, 43],
         imageOffset: [0, 0],
         contentOffset: [0, 15],
       },
       markerIconBANK: {
-        layout: 'default#imageWithContent',
-        imageHref: 'https://cdn-icons-png.flaticon.com/128/1511/1511143.png',
+        layout: "default#imageWithContent",
+        imageHref: "https://cdn-icons-png.flaticon.com/128/1511/1511143.png",
         imageSize: [43, 43],
         imageOffset: [0, 0],
         contentOffset: [0, 15],
@@ -65,23 +88,23 @@ export default {
 
       clusterOptions: {
         1: {
-            clusterDisableClickZoom: false,
-            clusterOpenBalloonOnClick: true,
-            clusterBalloonLayout: [
-              '<ul class=list>',
-              '{% for geoObject in properties.geoObjects %}',
-              '<li><a href=# class="list_item">{{ geoObject.properties.balloonContentHeader|raw }}</a></li>',
-              '{% endfor %}',
-              '</ul>',
-            ].join('')
-
-          },
+          clusterDisableClickZoom: false,
+          clusterOpenBalloonOnClick: true,
+          clusterBalloonLayout: [
+            "<ul class=list>",
+            "{% for geoObject in properties.geoObjects %}",
+            '<li><a href=# class="list_item">{{ geoObject.properties.balloonContentHeader|raw }}</a></li>',
+            "{% endfor %}",
+            "</ul>",
+          ].join(""),
         },
-
-      }
-    },
-      props: {
-      postamat_list: Array,}}
+      },
+    };
+  },
+  props: {
+    postamat_list: Array,
+  },
+};
 </script>
 
 <style>
@@ -108,8 +131,8 @@ export default {
 .ballon_footer {
   font-size: 12px;
   text-align: right;
-  border-top: 1px solid #7D7D7D;
-  color: #7D7D7D;
+  border-top: 1px solid #7d7d7d;
+  color: #7d7d7d;
   margin-top: 10px;
 }
 
