@@ -208,18 +208,16 @@ def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0
     offices = []
     atms = results_atms
     # Чек на фильтры
+    
     if filter:
         for subfilter in filter.split("//"):
             suboffice = [office for office in results_office if subfilter in office["services"]]
-            offices.extend(suboffice)
+            offices = [office for office in suboffice if office not in offices]
     else:
         offices = results_office
 
-    logger.debug(blind)
-    logger.debug(type(blind))
     # Чек на инвалида
     if type(blind) != type(None):
-        logger.debug(type(blind))
         if blind:
             atms = [atm for atm in atms if atm["services"]["blind"]["serviceActivity"] == "AVAILABLE"]
 
