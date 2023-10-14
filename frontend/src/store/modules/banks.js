@@ -10,8 +10,11 @@ export default {
       wheelchair: false,
       blind: false,
       road: false,
-    }
-      
+    },
+    my_coords:  [
+      54.82896654088406,
+      39.831893822753904,
+    ]
     
   },
   mutations: {
@@ -30,6 +33,9 @@ export default {
     SET_ROAD(state, road) {
       state.invalid.road = road;
     },
+    SET_COORDS(state, coords) {
+      state.my_coords = coords
+    }
   },
   getters: {
     allpostamats(state) {
@@ -47,12 +53,16 @@ export default {
     road(state) {
       return state.invalid.road;
     },
+    my_coords(state){
+      return state.my_coords;
+    }
   },
   actions: {
     GET_ALLPOSTAMATS: async (context,  payload,  ) => {
       let filter = payload.map(obj => obj.name);
+      console.log(filter.join('//'))
       let  postamats_list;
-      await axios.post(`http://${process.env.VUE_APP_USER_IP_WITHPORT}/getAllBanks?lattitude=0&longitude=0&filter=${filter.join('//')}&backway=false`).then((response) => {
+      await axios.post(`http://${process.env.VUE_APP_USER_IP_WITHPORT}/getAllBanks?lattitude=${context.state.my_coords[0]}&longitude=${context.state.my_coords[1]}&filter=${filter.join('//')}&blind=${context.state.invalid.wheelchair}&immobile=${context.state.invalid.blind}&backway=${context.state.invalid.road}`).then((response) => {
       postamats_list = response;
       })
       console.log(postamats_list.data);
@@ -70,5 +80,9 @@ export default {
     GET_ROAD: (context, road) => {
       context.commit("SET_ROAD",road)
     },
+    GET_MYCOORDS: (context, coords) => {
+      console.log(coords)
+      context.commit("SET_COORDS", coords)
+    }
   }
 }
