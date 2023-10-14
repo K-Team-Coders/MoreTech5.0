@@ -1,43 +1,18 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Video Streaming Demonstration</title>
+    <title>Загрузка и воспроизведение видео</title>
 </head>
 <body>
-  <h1>Video Streaming Demonstration</h1>
-  <img src="{{ url_for('video_feed') }}" id="video" style="width: 100%; height: auto;">
-  <!-- <img src="http://localhost:9000/video_feed"> -->
-  <button id="playButton">Play</button>
-  <button id="stopButton">Stop</button>
+    <h1>Загрузка и воспроизведение видео</h1>
+    
+    <!-- Форма для загрузки видео -->
+    <form action="/vid/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="video/*" required>
+        <button type="submit">Загрузить видео</button>
+    </form>
 
-  <script>
-    const video = document.getElementById('video');
-    const playButton = document.getElementById('playButton');
-    const stopButton = document.getElementById('stopButton');
-
-    let isPlaying = false;
-    let videoStream;
-
-    playButton.addEventListener('click', () => {
-      if (!isPlaying) {
-        isPlaying = true;
-        playButton.textContent = 'Pause';
-        videoStream = new Image();
-        videoStream.src = "{{ url_for('video_feed') }}";
-        video.src = videoStream.src;
-      } else {
-        isPlaying = false;
-        playButton.textContent = 'Play';
-      }
-    });
-
-    stopButton.addEventListener('click', () => {
-      if (videoStream) {
-        videoStream.src = '';
-      }
-      video.src = '';
-      playButton.textContent = 'Play';
-      isPlaying = false;
-    });
-  </script>
+    <!-- Видеоплеер для воспроизведения видео -->
+    
 </body>
 </html>

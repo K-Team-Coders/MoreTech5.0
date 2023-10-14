@@ -18,10 +18,10 @@ import json
 import csv
 import cv2
 from loguru import logger
-
+import os
 
 from celery.result import AsyncResult
-from fastapi import Body, FastAPI, Form, Request,Header,Response
+from fastapi import Body, FastAPI, Form, Request,Header,Response,UploadFile, File
 from fastapi.responses import JSONResponse,HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -74,11 +74,16 @@ def log_data(move_in, in_time, move_out, out_time):
 
 
 
-def get_frame():
+def get_frame(path_content):
 
 	# load our serialized model from disk
     net = cv2.dnn.readNetFromCaffe(args['prototxt'], args["model"])
-    vs = cv2.VideoCapture(args['input'])
+    if path_content == None:
+        vs = cv2.VideoCapture(0)
+    else:
+        
+        vs = cv2.VideoCapture(path_content)
+    
 	# if a video path was not supplied, grab a reference to the ip camera
 
 	# initialize the video writer (we'll instantiate later if need be)
@@ -330,11 +335,18 @@ def get_frame():
 async def read_root(request: Request):
   return templates.TemplateResponse("index.html", context={"request": request})
 
-@app.get('/video_feed', response_class=HTMLResponse)
-async def video_feed():
-  return StreamingResponse(get_frame(),
-                  media_type='multipart/x-mixed-replace; boundary=frame')
+@app.post("/vid/upload")
+async def upload_file(file: UploadFile = File(...)):
+    # Убедитесь, что у вас правильно настроен текущий рабочий каталог
+    current_directory = os.getcwd()
+    file_path = os.path.join(current_directory, "utils\\data", file.filename)
 
+    with open(file_path, 'wb') as image:
+        content = await file.read()
+        image.write(content)
+
+    return StreamingResponse(get_frame(file_path),
+                  media_type='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ =="__main__":
   import uvicorn
