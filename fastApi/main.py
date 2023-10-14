@@ -6,6 +6,7 @@ import json
 import random
 from pathlib import Path
 from typing import Optional, List
+from math import radians, cos, sin, asin, sqrt 
 
 import psycopg2
 from loguru import logger
@@ -138,11 +139,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def modelingCameraAdded():
-    """
-    Каждые N секунд в отделение заходит посетитель в случайное отделение
-    Зная по историческим данным среднее время обслуживание каждой услуги, не зная конкретно что может понадобиться посетителю, возьмем 
-    """
+# For calculating the distance in Kilometres  
+def distance_1(La1, La2, Lo1, Lo2): 
+      
+    # The math module contains the function name "radians" which is used for converting the degrees value into radians. 
+    Lo1 = radians(Lo1) 
+    Lo2 = radians(Lo2) 
+    La1 = radians(La1) 
+    La2 = radians(La2) 
+       
+    # Using the "Haversine formula" 
+    D_Lo = Lo2 - Lo1 
+    D_La = La2 - La1 
+    P = sin(D_La / 2)**2 + cos(La1) * cos(La2) * sin(D_Lo / 2)**2 
+  
+    Q = 2 * asin(sqrt(P)) 
+     
+    # The radius of earth in kilometres. 
+    R_km = 6371 
+       
+    # Then, we will calculate the result 
+    return(Q * R_km) 
 
 def modelingTalonAdded():
     """
@@ -236,4 +253,15 @@ def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0
             dicted["timing"] = timings_times[timings_addresses.index(office["name"])]
             results_offices.append(dicted)
 
-    return JSONResponse(content={"offices": results_offices, "atms": atms, "timings": timings}, status_code=200)
+    cleaned_offices = []
+    # Обработка координат
+    for office in results_offices:
+        if distance_1(lattitude, office["latitude"], longitude, office["longitude"]) < 10:
+            cleaned_offices.append(office)
+
+    cleaned_atms = []
+    for atm in atms:
+        if distance_1(lattitude, atm["latitude"], longitude, atm["longitude"]) < 10:
+            cleaned_atms.append(atm)
+
+    return JSONResponse(content={"offices": cleaned_offices, "atms": cleaned_atms, "timings": timings}, status_code=200)
