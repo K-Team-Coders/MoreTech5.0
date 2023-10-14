@@ -44,16 +44,18 @@
         </ul>
       </div>
     </transition>
-    <div v-if="selectedItems.length > 0" class="mt-2 flex">
-      <ul class="flex justify-start gap-1 flex-wrap">
+    <div v-if="selectedItems.length > 0" class="mt-2 mx-2 flex">
+      <ul class="flex justify- gap-1 items-center flex-wrap">
         <li
-          class="bg-blue-600 items-center gap-1 flex hover:bg-red-900 cursor-pointer text-idealWhite rounded-full px-2 py-1 text-sm"
+          class="bg-blue-600 flex justify-between items-center gap-1 w-full hover:bg-blue-900 cursor-pointer text-idealWhite rounded-full px-4 py-2 text-sm"
           v-for="item in selectedItems"
           :key="item.id"
           @click="removeItem(item)"
         >
           {{ item.name }}
-          <BaseIcon name="x" class="w-3 h-3"/>
+          <div>
+            <BaseIcon name="x" class="w-4 h-4" />
+          </div>
         </li>
       </ul>
     </div>
@@ -108,16 +110,12 @@ export default {
       return this.items.filter((item) =>
         item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    
-    }, 
-    ...mapGetters(['selected_filter']),
-      
-      
-
+    },
+    ...mapGetters(["selected_filter"]),
   },
   mounted() {
-    this.selectedItems = this.selected_filter,
-    document.addEventListener("keydown", this.handleKeyDown);
+    (this.selectedItems = this.selected_filter),
+      document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("click", this.handleClickOutside);
   },
   beforeUnmount() {
@@ -132,13 +130,11 @@ export default {
       if (this.selectedItems.includes(item)) {
         this.selectedItems = this.selectedItems.filter(
           (selectedItem) => selectedItem !== item
-        )
-       
+        );
       } else {
         this.selectedItems.push(item);
-        
       }
-      this.$store.dispatch('GET_FILTER', this.selectedItems);
+      this.$store.dispatch("GET_FILTER", this.selectedItems);
     },
     handleKeyDown(event) {
       if (event.key === "Escape") {
@@ -153,9 +149,9 @@ export default {
     removeItem(item) {
       this.selectedItems = this.selectedItems.filter(
         (selectedItem) => selectedItem !== item,
-        this.$store.dispatch('GET_FILTER', this.selectedItems)
+        this.$store.dispatch("GET_FILTER", this.selectedItems)
       );
-      this.$store.dispatch('GET_FILTER', this.selectedItems)
+      this.$store.dispatch("GET_FILTER", this.selectedItems);
     },
   },
 };
