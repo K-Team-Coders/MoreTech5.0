@@ -206,6 +206,7 @@ def getAllTimings():
 @app.post("/getAllBanks")
 def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[str] = [], blind: Optional[bool] = None, immobile: Optional[bool] = None, backway: Optional[bool] = False):
     offices = []
+    atms = results_atms
     # Чек на фильтры
     if filter:
         for subfilter in filter.split("//"):
@@ -214,12 +215,18 @@ def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0
     else:
         offices = results_office
 
-    logger.debug(len(offices))
+    logger.debug(blind)
+    logger.debug(type(blind))
     # Чек на инвалида
     if type(blind) != type(None):
-        logger.debug(blind)
+        logger.debug(type(blind))
+        if blind:
+            atms = [atm for atm in atms if atm["services"]["blind"]["serviceActivity"] == "AVAILABLE"]
 
-    atms = results_atms
+    if type(immobile) != type(None):
+        if immobile:
+            atms = [atm for atm in atms if atm["services"]["wheelchair"]["serviceActivity"] == "AVAILABLE"]
+
     timings = getAllTimings()
     timings_addresses = [timing["address"] for timing in timings]
     timings_times = [timing["time"] for timing in timings]
