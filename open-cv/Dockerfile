@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y ffmpeg libsm6 libxext6
 WORKDIR /app
 
 # Копируем файлы приложения в контейнер
-COPY ./fastapi/ /app/
+COPY . /app/
 
 # Устанавливаем зависимости из файла requirements.txt
 RUN ["pip","install" ,"-r", "requirements.txt"]

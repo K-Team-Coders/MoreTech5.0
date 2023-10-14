@@ -201,9 +201,23 @@ def getAllTimings():
         })
     return result
 
-@app.get("/getAllBanks")
-def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[list] = [], invalid: Optional[bool] = False, backway: Optional[bool] = False):
-    offices = results_office
+@app.post("/getAllBanks")
+def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[list] = [], invalid: Optional[bool] = None, backway: Optional[bool] = False):
+    offices = []
+    logger.debug(filter)
+    # Чек на фильтры
+    if filter:
+        for subfilter in filter:
+            suboffice = [office for office in results_office if subfilter in office["services"]]
+            offices.extend(suboffice)
+        offices = list(set(offices))
+    else:
+        offices = results_office
+
+    # Чек на инвалида
+    if type(invalid) != type(None):
+        logger.debug(invalid)
+
     atms = results_atms
     timings = getAllTimings()
     return JSONResponse(content={"offices": offices, "atms": atms, "timings": timings}, status_code=200)
