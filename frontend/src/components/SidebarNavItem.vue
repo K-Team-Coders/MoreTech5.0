@@ -44,8 +44,8 @@ export default {
     },
     iconClasses () {
       return this.isActive
-        ? 'w-6 h-6 mr-6 text-white'
-        : 'w-6 h-6 mr-6 text-white'
+        ? 'flex items-center w-6 h-6 mr-6 text-white'
+        : 'flex items-center w-6 h-6 mr-6 text-white'
     }
   }
 }

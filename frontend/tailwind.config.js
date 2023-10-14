@@ -16,7 +16,8 @@ module.exports = {
       colors: {
         idealWhite: "#f5f5f5",
         idealRed: "#FF1935",
-        idealBlue:"#0000ff",
+        idealBlue: "#002882",
+        idealCian: "#00AAFF",
         idealDarkGray: "#2F3342",
         idealSilver: "#E2E7EE",
         idealLightGray: "#BFCADA",

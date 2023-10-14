@@ -1,14 +1,20 @@
 <template>
   <div>
-    <div class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1">
+    <div
+      class="font-TT_Firs_Neue_Bold flex justify-start ml-4 tracking-wide text-[#E2E7EE] mt-2.5"
+    >
       <Dropdown />
     </div>
     <div>
+      <div>
+        <!-- <Toggle /> -->
+      </div>
       <p
-        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1"
+        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-3"
       >
         Степень инвалидности
       </p>
+
       <div
         id="v-model-multiple-checkboxes"
         class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
@@ -25,13 +31,13 @@
     </div>
     <div>
       <p
-        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-1"
+        class="text-lg leading-[21px] font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-2"
       >
-        Надо обратно
+        Учитывать обратный маршрут
       </p>
       <div
         id="v-model-multiple-checkboxes"
-        class="ml-4 font-semibold text-[#E2E7EE] text-[14px]"
+        class="ml-4 mt-1.5 font-semibold text-[#E2E7EE] text-[14px]"
       >
         <div class="">
           <input type="radio" id="BackYes" name="back" value="0" />
@@ -53,10 +59,12 @@
 import { mapActions } from "vuex";
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
+// import Toggle from "./Toggle.vue";
 export default {
   components: {
     Button,
     Dropdown,
+    // Toggle,
   },
   methods: {
     ...mapActions(["SEND_FILTER_DATA"]),
