@@ -18,7 +18,7 @@ import json
 import csv
 import cv2
 from loguru import logger
-import os
+
 
 from celery.result import AsyncResult
 from fastapi import Body, FastAPI, Form, Request,Header,Response,UploadFile, File
@@ -51,6 +51,8 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 
 start_time = time.time()
 
+total_people=None
+
 with open("utils/config.json", "r") as file:
     config = json.load(file)
 
@@ -72,12 +74,15 @@ def log_data(move_in, in_time, move_out, out_time):
 			wr.writerows(export_data)
 
 
-
+model_caffe=Path().cwd().joinpath('detector').joinpath("MobileNetSSD_deploy.caffemodel")
+model_proto=Path().cwd().joinpath('detector').joinpath("MobileNetSSD_deploy.prototxt")
+logger.debug(model_caffe)
+logger.debug(model_proto)
 
 def get_frame(path_content):
 
 	# load our serialized model from disk
-    net = cv2.dnn.readNetFromCaffe(args['prototxt'], args["model"])
+    net = cv2.dnn.readNetFromCaffe(str(model_proto), str(model_caffe))
     if path_content == None:
         vs = cv2.VideoCapture(0)
     else:
@@ -287,7 +292,7 @@ def get_frame(path_content):
             ("Status", status),
             ]
 
-            info_total = [
+            info_total=total_people= [
             ("Total people inside", ', '.join(map(str, total))),
             ]
             logger.debug(info_status)
@@ -330,7 +335,7 @@ def get_frame(path_content):
         
 
 
-
+import os
 @app.get("/vid")
 async def read_root(request: Request):
   return templates.TemplateResponse("index.html", context={"request": request})
@@ -339,7 +344,7 @@ async def read_root(request: Request):
 async def upload_file(file: UploadFile = File(...)):
     # Убедитесь, что у вас правильно настроен текущий рабочий каталог
     current_directory = os.getcwd()
-    file_path = os.path.join(current_directory, "utils\\data", file.filename)
+    file_path = os.path.join(current_directory, "utils/data", file.filename)
 
     with open(file_path, 'wb') as image:
         content = await file.read()
@@ -348,7 +353,3 @@ async def upload_file(file: UploadFile = File(...)):
     return StreamingResponse(get_frame(file_path),
                   media_type='multipart/x-mixed-replace; boundary=frame')
 
-if __name__ =="__main__":
-  import uvicorn
-   
-  uvicorn.run("main:app", host="127.0.0.1", port=9000, log_level="info",reload=True)
