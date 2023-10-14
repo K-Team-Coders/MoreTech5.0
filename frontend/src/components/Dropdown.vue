@@ -62,6 +62,7 @@
 
 <script>
 import { ref, computed } from "vue";
+import { mapActions, mapGetters } from "vuex";
 import BaseIcon from "./BaseIcon.vue";
 export default {
   components: { BaseIcon },
@@ -70,15 +71,34 @@ export default {
       isOpen: false,
       searchQuery: "",
       items: [
-        { id: 1, name: "Элемент 1" },
-        { id: 2, name: "Элемент 2" },
-        { id: 3, name: "Элемент 3" },
-        { id: 4, name: "Элемент 4" },
-        { id: 5, name: "Элемент 5" },
-        { id: 6, name: "Элемент 6" },
-        { id: 7, name: "Элемент 7" },
-        { id: 8, name: "Элемент 8" },
-        { id: 9, name: "Элемент 9" },
+        { id: 1, name: "Кредит наличными" },
+        { id: 2, name: "Экспресс-кредит" },
+        { id: 3, name: "Рефинансирование" },
+        { id: 4, name: "Кредит под залог недвижимости" },
+        { id: 5, name: "Дебетовые карты" },
+        { id: 6, name: "Кредитные карты" },
+        { id: 7, name: "Пенсионные карты" },
+        { id: 8, name: "Карты жителя" },
+        { id: 9, name: "Социальные карты" },
+        { id: 10, name: "Ипотека на готовый дом" },
+        { id: 11, name: "Ипотека на строящийся дом" },
+        { id: 12, name: "Кредит под залог имеющейся недвижимости" },
+        { id: 13, name: "Ипотека на машино-места и кладовки" },
+        { id: 14, name: "Ипотека с материнским капиталом" },
+        { id: 15, name: "Вклады" },
+        { id: 16, name: "Операции по счету" },
+        { id: 17, name: "Операции по инвестициям" },
+        { id: 18, name: "Обмен валют" },
+        { id: 19, name: "Оплата ЖКХ" },
+        { id: 20, name: "Расчетный счет" },
+        { id: 21, name: "Регистрация бизнеса" },
+        { id: 22, name: "Кредиты" },
+        { id: 22, name: "Бизнес-карты" },
+        { id: 23, name: "Эквайринг" },
+        { id: 24, name: "Депозиты" },
+        { id: 25, name: "ВЭД" },
+        { id: 26, name: "Гарантии и аккредитивы" },
+        { id: 27, name: "Сервисы для бизнеса" },
       ],
       selectedItems: [],
     };
@@ -88,9 +108,15 @@ export default {
       return this.items.filter((item) =>
         item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
-    },
+    
+    }, 
+    ...mapGetters(['selected_filter']),
+      
+      
+
   },
   mounted() {
+    this.selectedItems = this.selected_filter,
     document.addEventListener("keydown", this.handleKeyDown);
     document.addEventListener("click", this.handleClickOutside);
   },
@@ -106,10 +132,13 @@ export default {
       if (this.selectedItems.includes(item)) {
         this.selectedItems = this.selectedItems.filter(
           (selectedItem) => selectedItem !== item
-        );
+        )
+       
       } else {
         this.selectedItems.push(item);
+        
       }
+      this.$store.dispatch('GET_FILTER', this.selectedItems);
     },
     handleKeyDown(event) {
       if (event.key === "Escape") {
@@ -123,8 +152,10 @@ export default {
     },
     removeItem(item) {
       this.selectedItems = this.selectedItems.filter(
-        (selectedItem) => selectedItem !== item
+        (selectedItem) => selectedItem !== item,
+        this.$store.dispatch('GET_FILTER', this.selectedItems)
       );
+      this.$store.dispatch('GET_FILTER', this.selectedItems)
     },
   },
 };

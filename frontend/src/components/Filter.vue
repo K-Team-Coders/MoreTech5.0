@@ -50,13 +50,13 @@
       </div>
     </div>
     <div class="absolute left-0 bottom-0">
-      <Button label="Применить" />
+      <Button @click="GET_ALLPOSTAMATS(selected_filter)" label="Применить" />
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
 // import Toggle from "./Toggle.vue";
@@ -67,7 +67,10 @@ export default {
     // Toggle,
   },
   methods: {
-    ...mapActions(["SEND_FILTER_DATA"]),
+    ...mapActions(["GET_ALLPOSTAMATS"]),
+  },
+  computed: {
+    ...mapGetters(["selected_filter"])
   },
   data() {
     return {
