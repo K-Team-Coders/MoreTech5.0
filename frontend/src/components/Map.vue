@@ -1,37 +1,25 @@
 <template>
-  <yandex-map :coords="coords" :settings="settings" :zoom="5" @click="onClick">
-    <ymap-marker
-      :coords="coords"
-      marker-type="circle"
-      marker-id="1"
-      :marker-fill="markerfill_out"
-      :marker-stroke="markerstroke_out"
-      :circle-radius="uav_range"
-    />
-    <ymap-marker
-      :coords="coords"
-      marker-type="circle"
-      marker-id="2"
-      :marker-fill="markerfill_in"
-      :marker-stroke="markerstroke_in"
-      :circle-radius="uav_range / 2"
-    />
-    <ymap-marker
-      marker-type="placemark"
-      :coords="coords"
-      :icon="{
-    layout: 'default#image',
-    imageHref: uav_icon,
-    imageSize: [30, 40],
-    imageOffset: [-15, -30]
-}"
-      marker-id="3"
-    />
-  </yandex-map>
+  <div class="border-idealRed border-[6px] rounded-lg shadow-cards">
+    <yandex-map :coords="coords" :use-object-manager="true" :object-manager-clusterize="true" :settings="settings"
+      :zoom="5" :cluster-options="clusterOptions">
+      <ymap-marker v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
+        :markerId="item.id" :cluster-name="1"
+        :balloon="{
+          header: `Наименование: ${item.name}` ,
+          body: `Адрес:` + `${item.address} `  , 
+        }" />
+        <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
+        :markerId="item.id" :cluster-name="2"
+        :preset="islandsredIcon" 
+        :balloon="{
+          header: `Наименование: ${item.name}` ,
+          body: `Адрес:` + `${item.address} `  , 
+        }" />
+    </yandex-map>
+  </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
 import { yandexMap, ymapMarker } from "vue-yandex-maps";
 
 const settings = {
@@ -44,60 +32,69 @@ const settings = {
 
 export default {
   components: { yandexMap, ymapMarker },
-  computed: {
-    ...mapGetters(["uav_range", "uav_icon"]),
-   
-  },
+  computed: {},
+  
   data() {
     return {
-      coords: [55.753215, 46.622504],
+      
+      coords: [55.753215, 36.622504],
       settings: settings,
-      current_icon: '',
-      markerfill_out: {
-        enabled: true,
-        color: "#6A5ACD",
-        opacity: 0.4,
-      },
-      markerstroke_out: {
-        color: "#483D8B",
-        opacity: 0.4,
-        width: 2,
-      },
-      markerfill_in: {
-        enabled: true,
-        color: "#B22222",
-        opacity: 0.4,
-      },
-      markerstroke_in: {
-        color: "#8B0000",
-        opacity: 0.4,
-        width: 2,
-      },
-      markerfill_center: {
-        enabled: true,
-        color: "#000000",
-        opacity: 1,
-      },
-      markerstroke_center: {
-        color: "#000000",
-        opacity: 1,
-        width: 2,
+      clusterOptions: {
+        clusterOptions: {
+          1: {
+            clusterDisableClickZoom: false,
+            clusterOpenBalloonOnClick: true,
+            clusterBalloonLayout: [
+            '<ul class=list>',
+          '{% for geoObject in properties.geoObjects %}',
+          '<li><a href=# class="list_item">{{ geoObject.properties.balloonContentHeader|raw }}</a></li>',
+          '{% endfor %}',
+          '</ul>',
+        ].join('')
+            
+          },
+        },
       },
     };
-  },
-  methods: {
-    onClick(e) {
-      this.coords = e.get("coords");
-      
-    },
 
   },
+  props: {
+    postamat_list: Array,
+  },
+  
 };
 </script>
 
 <style>
 .ymap-container {
   width: 100%;
-  height: 100vh;
+  height: 76vh;
+}
+
+.ballon_header {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #708090;
+}
+
+.ballon_body {
+  font-size: 14px;
+  text-align: center;
+}
+
+.ballon_footer {
+  font-size: 12px;
+  text-align: right;
+  border-top: 1px solid #7D7D7D;
+  color: #7D7D7D;
+  margin-top: 10px;
+}
+
+.description {
+  display: block;
+  color: #999;
+  font-size: 10px;
+  line-height: 17px;
 }
 </style>

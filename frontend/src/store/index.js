@@ -1,11 +1,11 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
-import uavs from '@/store/modules/uavs.js'
+import postamat from '@/store/modules/banks'
 
 
 export default createStore({
   
   modules: {
-    uavs
+    postamat
   }
 })

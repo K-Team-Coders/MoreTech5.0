@@ -1,28 +1,53 @@
 <template>
+  <div class="w-[603px] p-2">
     <Bar :chart-data="chartData" />
+  </div>
 </template>
 
 <script>
 import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+} from 'chart.js'
 
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
 
 export default {
   name: 'BarChart',
   components: { Bar },
-  data() {
+  props: {
+    bardata: Object
+  },
+  data () {
     return {
       chartData: {
-        labels: [ 'Игорь', 'Артем', 'Жора'],
+        labels: [
+          'Проблем нет',
+          'С товаром',
+          'С доставкой',
+          'С постаматом',
+          'Со сроками'
+        ],
         datasets: [
           {
-            label: 'Уровень тупости',
-            backgroundColor: '#ba4949',
-            data: [40, 20, 12]
+            label: 'Распределение проблем по отзывам',
+            backgroundColor: '#E5102A',
+            data: Array(
+              this.bardata.good,
+              this.bardata.article,
+              this.bardata.delivery,
+              this.bardata.post,
+              this.bardata.times
+            )
           }
         ]
-      }   
+      }
     }
   }
 }
