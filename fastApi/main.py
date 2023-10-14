@@ -193,7 +193,7 @@ def modelingTalonAdded():
 @app.on_event("startup")
 def start_modeling():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(modelingTalonAdded, "interval", seconds=5)
+    scheduler.add_job(modelingTalonAdded, "interval", seconds=1)
     scheduler.start()
 
 def getAllTimings():
@@ -263,5 +263,8 @@ def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0
     for atm in atms:
         if distance_1(lattitude, atm["latitude"], longitude, atm["longitude"]) < 10:
             cleaned_atms.append(atm)
+    unique = []
+    unique = [atm for atm in cleaned_atms if atm not in unique]
 
-    return JSONResponse(content={"offices": cleaned_offices, "atms": cleaned_atms, "timings": timings}, status_code=200)
+
+    return JSONResponse(content={"offices": cleaned_offices, "atms": unique, "timings": timings}, status_code=200)
