@@ -1,10 +1,11 @@
 import os
 import datetime
 import time
+import copy
 import json
 import random
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 import psycopg2
 from loguru import logger
@@ -75,6 +76,7 @@ for index, atm in enumerate(atms["atms"]):
     result["address"] = atm["address"]   
     result["longitude"] = atm["longitude"]
     result["latitude"] = atm["latitude"]
+    result["services"] = atm["services"]
     results_atms.append(result)
 
 DBenv = Path().cwd().parent.joinpath("DB.env")
@@ -202,22 +204,36 @@ def getAllTimings():
     return result
 
 @app.post("/getAllBanks")
-def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[list] = [], invalid: Optional[bool] = None, backway: Optional[bool] = False):
+def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0.0, filter: Optional[str] = [], blind: Optional[bool] = None, immobile: Optional[bool] = None, backway: Optional[bool] = False):
     offices = []
-    logger.debug(filter)
+    atms = results_atms
     # Чек на фильтры
+    
     if filter:
-        for subfilter in filter:
+        for subfilter in filter.split("//"):
             suboffice = [office for office in results_office if subfilter in office["services"]]
-            offices.extend(suboffice)
-        offices = list(set(offices))
+            offices = [office for office in suboffice if office not in offices]
     else:
         offices = results_office
 
     # Чек на инвалида
-    if type(invalid) != type(None):
-        logger.debug(invalid)
+    if type(blind) != type(None):
+        if blind:
+            atms = [atm for atm in atms if atm["services"]["blind"]["serviceActivity"] == "AVAILABLE"]
 
-    atms = results_atms
+    if type(immobile) != type(None):
+        if immobile:
+            atms = [atm for atm in atms if atm["services"]["wheelchair"]["serviceActivity"] == "AVAILABLE"]
+
     timings = getAllTimings()
-    return JSONResponse(content={"offices": offices, "atms": atms, "timings": timings}, status_code=200)
+    timings_addresses = [timing["address"] for timing in timings]
+    timings_times = [timing["time"] for timing in timings]
+
+    results_offices = []
+    for office in offices:
+        if office["name"] in timings_addresses:
+            dicted = copy.deepcopy(office)
+            dicted["timing"] = timings_times[timings_addresses.index(office["name"])]
+            results_offices.append(dicted)
+
+    return JSONResponse(content={"offices": results_offices, "atms": atms, "timings": timings}, status_code=200)
