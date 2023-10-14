@@ -12,10 +12,23 @@
       <p
         class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-3"
       >
-        Степень инвалидности
+        Маломобильный гражданин
       </p>
       <div class="ml-4 mt-1">
-        <Toggle id="invalid" />
+        <ToggleWheel id="whellchair" />
+      </div>
+    </div>
+    <div>
+      <div>
+        <!-- <Toggle /> -->
+      </div>
+      <p
+        class="text-lg font-TT_Firs_Neue_Bold tracking-wide ml-4 text-[#E2E7EE] mt-3"
+      >
+        Слабовидящий гражданин
+      </p>
+      <div class="ml-4 mt-1">
+        <ToggleBlind :id="blind" />
       </div>
     </div>
     <div>
@@ -25,7 +38,7 @@
         Учитывать обратный маршрут
       </p>
       <div class="ml-4 mt-2.5">
-        <Toggle id="road" />
+        <ToggleRoad id="road" />
       </div>
     </div>
     <div class="absolute left-0 bottom-0">
@@ -38,12 +51,16 @@
 import { mapActions, mapGetters } from "vuex";
 import Button from "./Button.vue";
 import Dropdown from "./Dropdown.vue";
-import Toggle from "./Toggle.vue";
+import ToggleWheel from "./ToggleWheel.vue";
+import ToggleBlind from "./ToggleBlind.vue";
+import ToggleRoad from "./ToggleRoad.vue";
 export default {
   components: {
     Button,
     Dropdown,
-    Toggle,
+    ToggleWheel,
+    ToggleRoad,
+    ToggleBlind
   },
   methods: {
     ...mapActions(["GET_ALLPOSTAMATS"]),
