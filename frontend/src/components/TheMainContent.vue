@@ -32,6 +32,17 @@
       <div class="px-5 py-3 h-full" v-if="$attrs.activeindex === 1">
         <UploadForm />
         <DropDownOffice />
+        <div
+          class="bg-idealDarkGray text-2xl rounded-xl h-56 mt-2 text-left px-4 text-white font-TT_Firs_Neue_Bold font-bold"
+        >
+          <p class="pt-4">Тест</p>
+        </div>
+        <div
+          class="bg-idealDarkGray text-2xl rounded-xl h-56 mt-2 text-left px-4 text-white font-TT_Firs_Neue_Bold font-bold"
+        >
+          <p class="pt-4">Время</p>
+          <p class="pt-4">Количество людей</p>
+        </div>
       </div>
     </transition>
   </div>
