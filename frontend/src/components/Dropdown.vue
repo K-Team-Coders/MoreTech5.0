@@ -44,17 +44,17 @@
         </ul>
       </div>
     </transition>
-    <div v-if="selectedItems.length > 0" class="mt-2 mx-2 flex">
-      <ul class="flex justify- gap-1 items-center flex-wrap">
+    <div v-if="selectedItems.length > 0" class="mt-2 flex">
+      <ul class="flex justify-start gap-1 flex-wrap">
         <li
-          class="bg-blue-600 flex justify-between items-center gap-1 w-full hover:bg-blue-900 cursor-pointer text-idealWhite rounded-full px-4 py-2 text-sm"
+          class="bg-blue-600 justify-between items-center gap-1 flex hover:bg-blue-900 cursor-pointer text-idealWhite rounded-full px-2 py-1 text-sm"
           v-for="item in selectedItems"
           :key="item.id"
           @click="removeItem(item)"
         >
           {{ item.name }}
-          <div>
-            <BaseIcon name="x" class="w-4 h-4" />
+          <div class="w-4">
+            <BaseIcon name="x" class="w-3 h-3" />
           </div>
         </li>
       </ul>

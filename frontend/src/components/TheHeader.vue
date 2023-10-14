@@ -1,6 +1,7 @@
 <template>
   <header :class="classesHeader">
-    <div>
+    <div class="flex items-center justify-between">
+      <LogoMain class=""/>
       <HeaderTimeAndDate />
     </div>
   </header>
@@ -8,10 +9,12 @@
 
 <script>
 import HeaderTimeAndDate from "./HeaderTimeAndDate.vue";
+import LogoMain from "./LogoMain.vue";
 
 export default {
   components: {
     HeaderTimeAndDate,
+    LogoMain,
   },
   data() {
     return {
