@@ -25,7 +25,7 @@
     "vue-router": "^4.0.3",
     "vue-sidebar-menu-akahon": "^0.1.4",
     "vue-tailwind-datepicker": "^1.4.4",
-    "vue-yandex-maps": "^0.12.3",
+    "vue-yandex-maps": "^0.12.7",
     "vue3-apexcharts": "^1.4.1",
     "vue3-easy-data-table": "^1.5.42",
     "vuex": "^4.0.2"
