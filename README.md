@@ -129,9 +129,10 @@ FastAPI, VueJS, PostgreSQL, Docker (docker-compose).
   * Временная статистика: Микросервис собирает и анализирует статистику по времени появления и ухода посетителей, что может помочь вам оптимизировать обслуживание.
   * Анализ плотности: Система способна определять плотность посетителей в разных зонах банка, что помогает управлять безопасностью и потоком клиентов.
   * Интеграция с видеокамерами: Микросервис легко интегрируется с существующими видеокамерами для непрерывного мониторинга и анализа.
-  
+
+
 <div align="center">
-  <img src="https://github.com/K-Team-Coders/MoreTech5.0/assets/80591614/bb73cb92-cde4-4826-9d15-9be18dca7ffd)https://github.com/K-Team-Coders/MoreTech5.0/assets/80591614/bb73cb92-cde4-4826-9d15-9be18dca7ffd" alt="Image Description">
+  <img src="https://github.com/K-Team-Coders/MoreTech5.0/assets/80591614/2373d584-f0b1-4bd1-9a71-eba2e450b456" alt="Image Description">
 </div>
 
 * `docker build -t ml-app .`
