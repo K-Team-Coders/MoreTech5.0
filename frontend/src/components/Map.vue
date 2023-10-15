@@ -2,7 +2,7 @@
   <div class="border-idealBlue border-[6px] rounded-lg shadow-cards">
     <yandex-map @map-was-initialized="handler" @click="changeMyPos" :coords="coords" :use-object-manager="true"
       :object-manager-clusterize="true"  :controls="['routePanelControl'] " :settings="settings" :zoom="5" :cluster-options="clusterOptions">
-      <ymap-marker  v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
+      <ymap-marker   v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
         :markerId="item.id" :cluster-name="1" :icon="markerIconBANK" :balloon-template="balloonTemplate(item)" />
       <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
         :markerId="item.id" :cluster-name="2" :balloon="{
@@ -10,7 +10,7 @@
         }" :icon="markerIconATM" />
       <ymap-marker :coords="my_coords" marker-id="765" hint-content="Имитация местоположения. Команда из СПб :)"
         :icon="markerIconUSER" />
-
+        
     </yandex-map>
     
   </div>
@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      choosed_bank: '',
       map: null,
       ymaps_user: null,
       markerfill_in: {
@@ -59,7 +60,7 @@ export default {
       },
       my_coords: [
         54.82896654088406,
-        39.831893822753904,
+        39.831893822753904
       ],
       coords: [55.753215, 36.622504],
       settings: settings,
@@ -122,14 +123,13 @@ export default {
     <ul class="font-TT_Firs_Neue_Regular"><span class="font-bold text-idealBlue">Категории:</span>
       ${item.services.map((service) => `<li>${service}</li>`).join("")}
     </ul>
-    <button  onclick="add_route(ymaps_user, [item.latitude, item.longitude])">Построить маршрут</button>
   `;
     },
     handler(map) {
 
       this.map = map;
     },
-    add_route(ymaps, itemcoords) {
+    add_route(itemcoords) {
       var control = this.map.controls.get('routePanelControl');
 
 // Зададим состояние панели для построения машрутов.
@@ -142,7 +142,10 @@ control.routePanel.state.set({
     from: this.my_coords,
     // Включим возможность задавать пункт назначения в поле ввода.
     toEnabled: false,
-      to: itemcoords// Адрес или координаты пункта назначения.
+      to: [
+        54.82896654088406,
+        39.831893822753904
+      ]// Адрес или координаты пункта назначения.
     //to: 'Петербург'
 });
 
@@ -158,7 +161,7 @@ control.routePanel.options.set({
 });
 
 // Создаем кнопку, с помощью которой пользователи смогут менять местами начальную и конечную точки маршрута.
-var switchPointsButton = new ymaps.control.Button({
+var switchPointsButton = new this.ymaps_user.control.Button({
     data: {content: "Поменять местами", title: "Поменять точки местами"},
     options: {selectOnClick: false, maxWidth: 160}
 });
