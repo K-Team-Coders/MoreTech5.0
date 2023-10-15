@@ -90,7 +90,7 @@ def prepareData(data, split_date, lag_start=5, lag_end=20, test_size=0.15):
 @app.post("/test")
 async def get_pred(data: PredictionData):
     # Убедитесь, что у вас правильно настроен текущий рабочий каталог
-    file_path = Path().cwd().joinpath('data').joinpath('cumForJora.xlsx')
+    file_path = Path().cwd().joinpath('data').joinpath('test_data.xlsx')
     logger.debug(file_path)
 
     param1 = data.param1
