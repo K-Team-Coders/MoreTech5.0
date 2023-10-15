@@ -267,4 +267,4 @@ def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0
     unique = [atm for atm in cleaned_atms if atm not in unique]
 
 
-    return JSONResponse(content={"offices": cleaned_offices, "atms": unique, "timings": timings}, status_code=200)
+    return JSONResponse(content={"offices": cleaned_offices, "atms": unique}, status_code=200)
