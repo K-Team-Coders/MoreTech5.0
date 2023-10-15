@@ -256,15 +256,15 @@ def webAllBanks(lattitude: Optional[float] = 0.0, longitude: Optional[float] = 0
     cleaned_offices = []
     # Обработка координат
     for office in results_offices:
-        if distance_1(lattitude, office["latitude"], longitude, office["longitude"]) < 10:
+        if distance_1(lattitude, office["latitude"], longitude, office["longitude"]) < 7:
             cleaned_offices.append(office)
 
     cleaned_atms = []
     for atm in atms:
-        if distance_1(lattitude, atm["latitude"], longitude, atm["longitude"]) < 10:
+        if distance_1(lattitude, atm["latitude"], longitude, atm["longitude"]) < 5:
             cleaned_atms.append(atm)
     unique = []
     unique = [atm for atm in cleaned_atms if atm not in unique]
 
 
-    return JSONResponse(content={"offices": cleaned_offices, "atms": unique, "timings": timings}, status_code=200)
+    return JSONResponse(content={"offices": cleaned_offices, "atms": unique}, status_code=200)

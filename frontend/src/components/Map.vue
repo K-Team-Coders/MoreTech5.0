@@ -1,8 +1,8 @@
 <template>
   <div class="border-idealBlue border-[6px] rounded-lg shadow-cards">
     <yandex-map @map-was-initialized="handler" @click="changeMyPos" :coords="coords" :use-object-manager="true"
-      :object-manager-clusterize="true" :settings="settings" :zoom="5" :cluster-options="clusterOptions">
-      <ymap-marker v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
+      :object-manager-clusterize="true"  :controls="['routePanelControl'] " :settings="settings" :zoom="5" :cluster-options="clusterOptions">
+      <ymap-marker   v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
         :markerId="item.id" :cluster-name="1" :icon="markerIconBANK" :balloon-template="balloonTemplate(item)" />
       <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
         :markerId="item.id" :cluster-name="2" :balloon="{
@@ -10,9 +10,9 @@
         }" :icon="markerIconATM" />
       <ymap-marker :coords="my_coords" marker-id="765" hint-content="Имитация местоположения. Команда из СПб :)"
         :icon="markerIconUSER" />
-
+        
     </yandex-map>
-    <button @click="add_route()"> Да</button>
+    
   </div>
 </template>
 
@@ -29,7 +29,7 @@ const settings = {
 };
 
 export default {
-  components: { yandexMap, ymapMarker, loadYmap },
+  components: { yandexMap, ymapMarker },
   computed: {
     ...mapGetters(['selected_filter']),
 
@@ -45,6 +45,7 @@ export default {
   },
   data() {
     return {
+      choosed_bank: '',
       map: null,
       ymaps_user: null,
       markerfill_in: {
@@ -59,7 +60,7 @@ export default {
       },
       my_coords: [
         54.82896654088406,
-        39.831893822753904,
+        39.831893822753904
       ],
       coords: [55.753215, 36.622504],
       settings: settings,
@@ -122,34 +123,59 @@ export default {
     <ul class="font-TT_Firs_Neue_Regular"><span class="font-bold text-idealBlue">Категории:</span>
       ${item.services.map((service) => `<li>${service}</li>`).join("")}
     </ul>
-    
   `;
     },
     handler(map) {
 
       this.map = map;
     },
-    add_route() {
-      console.log(this.ymaps_user)
-      let multiRoute =  new this.ymaps_user.multiRouter.MultiRoute({
-        // Описание опорных точек мультимаршрута.
-        referencePoints: [
-            'Санкт-Петербург',
-            "Москва, ул. Мясницкая"
-        ],
-        params: {
-          avoidTrafficJams: true,
-         
-            results: 2
-        
-        }
-      })
-      console.log(multiRoute)
-      this.map.geoObjects.add(multiRoute)
-    }
-  },
-  props: {
-    postamat_list: Array,
+    add_route(itemcoords) {
+      var control = this.map.controls.get('routePanelControl');
+
+// Зададим состояние панели для построения машрутов.
+control.routePanel.state.set({
+    // Тип маршрутизации.
+    type: 'masstransit',
+    // Выключим возможность задавать пункт отправления в поле ввода.
+    fromEnabled: false,
+    // Адрес или координаты пункта отправления.
+    from: this.my_coords,
+    // Включим возможность задавать пункт назначения в поле ввода.
+    toEnabled: false,
+      to: [
+        54.82896654088406,
+        39.831893822753904
+      ]// Адрес или координаты пункта назначения.
+    //to: 'Петербург'
+});
+
+// Зададим опции панели для построения машрутов.
+control.routePanel.options.set({
+    // Запрещаем показ кнопки, позволяющей менять местами начальную и конечную точки маршрута.
+    allowSwitch: false,
+    // Включим определение адреса по координатам клика.
+    // Адрес будет автоматически подставляться в поле ввода на панели, а также в подпись метки маршрута.
+    reverseGeocoding: true,
+    // Зададим виды маршрутизации, которые будут доступны пользователям для выбора.
+    types: { masstransit: true, pedestrian: true, taxi: true }
+});
+
+// Создаем кнопку, с помощью которой пользователи смогут менять местами начальную и конечную точки маршрута.
+var switchPointsButton = new this.ymaps_user.control.Button({
+    data: {content: "Поменять местами", title: "Поменять точки местами"},
+    options: {selectOnClick: false, maxWidth: 160}
+});
+// Объявляем обработчик для кнопки.
+switchPointsButton.events.add('click', function () {
+    // Меняет местами начальную и конечную точки маршрута.
+    control.routePanel.switchPoints();
+});
+this.map.controls.add(switchPointsButton);
+
+  }
+},
+props: {
+  postamat_list: Array,
   },
 };
 </script>
