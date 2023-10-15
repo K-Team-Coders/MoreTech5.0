@@ -1,7 +1,7 @@
 <template>
   <div class="border-idealBlue border-[6px] rounded-lg shadow-cards">
-    <yandex-map @click="changeMyPos" :coords="coords" :use-object-manager="true" :object-manager-clusterize="true"
-      :settings="settings" :zoom="5" :controls="['routePanelControl']" :cluster-options="clusterOptions">
+    <yandex-map @map-was-initialized="handler" @click="changeMyPos" :coords="coords" :use-object-manager="true"
+      :object-manager-clusterize="true" :settings="settings" :zoom="5" :cluster-options="clusterOptions">
       <ymap-marker v-for="item in postamat_list.offices" :key="item.id" :coords="[item.latitude, item.longitude]"
         :markerId="item.id" :cluster-name="1" :icon="markerIconBANK" :balloon-template="balloonTemplate(item)" />
       <ymap-marker v-for="item in postamat_list.atms" :key="item.id" :coords="[item.latitude, item.longitude]"
@@ -10,17 +10,18 @@
         }" :icon="markerIconATM" />
       <ymap-marker :coords="my_coords" marker-id="765" hint-content="Имитация местоположения. Команда из СПб :)"
         :icon="markerIconUSER" />
-        
+
     </yandex-map>
+    <button @click="add_route()"> Да</button>
   </div>
 </template>
 
 <script>
-import { yandexMap, ymapMarker, loadYmap} from "vue-yandex-maps";
+import { yandexMap, ymapMarker, loadYmap } from "vue-yandex-maps";
 import { mapActions, mapGetters } from 'vuex';
 
 const settings = {
-  apiKey: "06856716-badb-42a6-9815-4c8e630af04b",
+  apiKey: "9b855f9b-6853-4cb2-b2f8-f02951d693c4",
   lang: "ru_RU",
   coordorder: "latlong",
   enterprise: false,
@@ -36,18 +37,16 @@ export default {
 
   },
   async mounted() {
-    await loadYmap({ ...settings, debug: true });
-    let control = ymap.controls.get('routePanelControl');
-
-    // Set states for the routing panel.
-    control.routePanel.state.set({
-        // Address of the starting point.
-        from: '16 Lva Tolstogo, Moscow',
-        // Address of the ending point.
-     
-  })},
+    const settings = {
+      ...this.settings
+    };
+    await loadYmap({ settings, debug: true });
+    this.ymaps_user = ymaps
+  },
   data() {
     return {
+      map: null,
+      ymaps_user: null,
       markerfill_in: {
         enabled: true,
         color: "#B22222",
@@ -88,6 +87,7 @@ export default {
 
       clusterOptions: {
         1: {
+          preset: 'islands#darkGreenClusterIcons',
           clusterDisableClickZoom: false,
           clusterOpenBalloonOnClick: true,
           clusterBalloonLayout: [
@@ -125,6 +125,28 @@ export default {
     
   `;
     },
+    handler(map) {
+
+      this.map = map;
+    },
+    add_route() {
+      console.log(this.ymaps_user)
+      let multiRoute =  new this.ymaps_user.multiRouter.MultiRoute({
+        // Описание опорных точек мультимаршрута.
+        referencePoints: [
+            'Санкт-Петербург',
+            "Москва, ул. Мясницкая"
+        ],
+        params: {
+          avoidTrafficJams: true,
+         
+            results: 2
+        
+        }
+      })
+      console.log(multiRoute)
+      this.map.geoObjects.add(multiRoute)
+    }
   },
   props: {
     postamat_list: Array,
